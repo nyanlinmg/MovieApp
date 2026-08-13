@@ -1,0 +1,20 @@
+run Next.js
+-> npx next
+
+create project -> npx create-next-app movie-app
+
+-> popular ui framework -- shadcn.com (based on Tailwind css)
+-> npx shadcn@latest init -t next
+-> npx shadcn@latest add button
+-> npx shadcn@latest add input
+
+icon framework -> lucide
+-> npm install lucide-react
+
+if you want to change layout -> go app / layout.tsx
+
+Two component in Next.js
+
+server component - onClick , onSubmit won't work in server component (have to declare "use client")
+
+client component - work in browser (onClick , onSubmit, useState);
