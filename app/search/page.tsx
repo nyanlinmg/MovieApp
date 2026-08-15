@@ -26,11 +26,11 @@ export default async function Search({
         <div>
             <h2 className="text-2xl p-2 mb-4 border-b">Search: {q}</h2>
                 <div className="flex flex-wrap gap-2">
-                    {movies.map(movie => {
+                    {/* {movies.map(movie => {
                         return (
-                            <Movie key={movie.id} movie={movie} />
+                            // <Movie key={movie.id} movie={movie} />
                         )
-                    })}
+                    })} */}
                 </div>
         </div>
     )

@@ -1,51 +1,67 @@
-import Movie from "@/components/movie";
-import { MovieType } from "@/types/global";
+import HeroSearch from "@/components/HeroSearch";
+import FilterableMovieSection from "@/components/FilterableMovieSection";
+import {
+  getPopularMovies,
+  getPopularTv,
+  getTrendingMovies,
+  getTrendingTv,
+  getUpcomingMovies,
+  getUpcomingTv,
+} from "@/services/tmdb";
 
-async function fetchUpcoming(): Promise<MovieType[]> {
-    const res = await fetch("https://api.themoviedb.org/3/movie/upcoming", {
-        headers: {
-            Authorization: `Bearer ${process.env.TMDB_TOKEN}`
-        }
-    });
+const BACKDROP_BASE = "http://image.tmdb.org/t/p/original";
 
-    const data = await res.json();
-    return data.results;
-}
+export const dynamic = "force-dynamic";
 
-async function fetchPopular(): Promise<MovieType[]> {
-    const res = await fetch("https://api.themoviedb.org/3/movie/popular", {
-        headers: {
-            Authorization: `Bearer ${process.env.TMDB_TOKEN}`
-        }
-    });
+export default async function HomePage() {
+  const [
+    trendingMovies,
+    trendingTv,
+    popularMovies,
+    popularTv,
+    upcomingMovies,
+    upcomingTv,
+  ] = await Promise.all([
+    getTrendingMovies(),
+    getTrendingTv(),
+    getPopularMovies(),
+    getPopularTv(),
+    getUpcomingMovies(),
+    getUpcomingTv(),
+  ]);
 
-    const data = await res.json();
-    return data.results;
-}
+  const withBackdrop = trendingMovies.filter((m) => m.backdrop_path);
+  const randomIndex = Math.floor(Math.random() * withBackdrop.length);
+  const randomMovie = withBackdrop[randomIndex];
+  const backdropUrl = randomMovie ? BACKDROP_BASE + randomMovie.backdrop_path : "";
 
-export default async function Home() {
-    const upcoming = await fetchUpcoming();
-    const popular = await fetchPopular();
+  return (
+    <div className="bg-black min-h-screen">
+      <HeroSearch backdropUrl={backdropUrl} />
 
-    return (
-        <div>
-            <h2 className="text-2xl p-2 mb-4 border-b">Popular</h2>
-            <div className="flex flex-wrap gap-2">
-                {popular.map(movie => {
-                    return (
-                      <Movie key={movie.id} movie={movie} />
-                    )
-                })}
-            </div>
+      <FilterableMovieSection
+        title="Trending"
+        movieItems={trendingMovies}
+        tvItems={trendingTv}
+        movieViewAllHref="/movie/trending"
+        tvViewAllHref="/tv/trending"
+      />
 
-            <h2 className="text-2xl p-2 mb-4 border-b mt-3">Upcoming</h2>
-            <div className="flex flex-wrap gap-2">
-                {upcoming.map(movie => {
-                    return (
-                      <Movie key={movie.id} movie={movie} />
-                    )
-                })}
-            </div>
-        </div>
-    )
+      <FilterableMovieSection
+        title="Popular"
+        movieItems={popularMovies}
+        tvItems={popularTv}
+        movieViewAllHref="/movie/popular"
+        tvViewAllHref="/tv/popular"
+      />
+
+      <FilterableMovieSection
+        title="Upcoming"
+        movieItems={upcomingMovies}
+        tvItems={upcomingTv}
+        movieViewAllHref="/movie/upcoming"
+        tvViewAllHref="/tv/upcoming"
+      />
+    </div>
+  );
 }
