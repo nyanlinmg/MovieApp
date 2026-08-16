@@ -84,7 +84,7 @@ export default function Header() {
             >
               <TvMinimalPlayIcon size={26} className="text-[#01b4e4]" />
             </motion.span>
-            Anime HUB
+            Movie HUB
         </Link>
 
         <NavigationMenu className="hidden lg:flex">
@@ -94,7 +94,7 @@ export default function Header() {
                         <NavigationMenuItem className="text-lg relative group/home">
                         <Link href="/" onClick={handleLogoClick} className="relative inline-block py-1 transition group-hover/home:text-[#01b4e4]">
                             Home
-                            <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-[#01b4e4] transition-all duration-300 group-hover/home:w-full" />
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/home:w-full" />
                         </Link>
                         </NavigationMenuItem>
                     </motion.div>
@@ -104,7 +104,7 @@ export default function Header() {
                         <NavigationMenuItem className="text-lg relative group/profile">
                             <Link href="/" className="relative inline-block py-1 transition group-hover/profile:text-[#01b4e4]">
                             Profile
-                            <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-[#01b4e4] transition-all duration-300 group-hover/profile:w-full" />
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/profile:w-full" />
                             </Link>
                         </NavigationMenuItem>
                         </motion.div>
@@ -113,8 +113,8 @@ export default function Header() {
                     <motion.div variants={desktopNavItemVariants}>
                         <NavigationMenuItem className="text-lg relative group/browse">
                         <Link href="/" className="relative inline-block py-1 transition group-hover/browse:text-[#01b4e4]">
-                            Browse
-                            <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-[#01b4e4] transition-all duration-300 group-hover/browse:w-full" />
+                            Movies
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/browse:w-full" />
                         </Link>
                         </NavigationMenuItem>
                     </motion.div>
@@ -122,8 +122,8 @@ export default function Header() {
                     <motion.div variants={desktopNavItemVariants}>
                         <NavigationMenuItem className="text-lg relative group/genres">
                         <Link href="/" className="relative inline-block py-1 transition group-hover/genres:text-[#01b4e4]">
-                            Genres
-                            <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-[#01b4e4] transition-all duration-300 group-hover/genres:w-full" />
+                            TV Shows
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/genres:w-full" />
                         </Link>
                         </NavigationMenuItem>
                     </motion.div>
@@ -131,8 +131,8 @@ export default function Header() {
                     <motion.div variants={desktopNavItemVariants}>
                         <NavigationMenuItem className="text-lg relative group/characters">
                         <Link href="/" className="relative inline-block py-1 transition group-hover/characters:text-[#01b4e4]">
-                            Characters
-                            <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-[#01b4e4] transition-all duration-300 group-hover/characters:w-full" />
+                            People
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/characters:w-full" />
                         </Link>
                         </NavigationMenuItem>
                     </motion.div>

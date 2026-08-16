@@ -1,17 +1,20 @@
-import { MovieType} from "@/types/global";
-import Link from "next/link";
-
-const image_url = "http://image.tmdb.org/t/p/w1280";
-const person_url = "http://image.tmdb.org/t/p/w185";
+import { MoreDetail } from "@/components/Moredetails";
+import MovieHero from "@/components/MovieHero";
+import { getMovieCertification, getMovieDetails } from "@/services/tmdb";
 
 export default async function MovieDetail({
     params,
 }: {
-    params: Promise<{id: string}>
+    params: Promise<{ id: string }>;
 }) {
-    const {id} = await params;
+    const { id } = await params;
+    const movie = await getMovieDetails(Number(id));
 
-    return <div>
-        <h1>Move Detail</h1>
-    </div>
+    return (
+        <div>
+            <MovieHero movie={movie}/>
+
+            <MoreDetail movie={movie} />
+        </div>
+    );
 }

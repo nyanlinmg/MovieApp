@@ -53,8 +53,8 @@ export default function MovieSection({
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex text-black" />
-        <CarouselNext className="hidden md:flex text-black" />
+        <CarouselPrevious className=" text-black" />
+        <CarouselNext className=" text-black" />
       </Carousel>
     </motion.section>
   );
