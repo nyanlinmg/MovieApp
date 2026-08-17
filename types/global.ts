@@ -4,6 +4,15 @@ export interface Genre {
     name: string;
 }
 
+export type VideoType = {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+};
+
 export interface ProductionCompany {
     id: number;
     name: string;

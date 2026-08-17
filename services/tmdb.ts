@@ -1,4 +1,4 @@
-import { MovieType, TvType } from "@/types/global";
+import { MovieType, TvType, VideoType } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -103,19 +103,18 @@ export async function getMovieDetails(id: number): Promise<MovieType> {
     return data;
 }
 
-export async function getMovieCertification(id: number) : Promise<string | null> {
-    const res = await fetch(`${BASE_URL}/movie/${id}/release_date`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        accept: "application/json"
-      }
-    });
+export async function getMovieVideos(id: number) : Promise<VideoType[]> {
+  const res = await fetch(`${BASE_URL}/movie/${id}/videos?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
 
-    if (!res.ok) {
-      return null;
-    }
+  if (!res.ok) {
+    throw new Error("Failed to fetch movie videos");
+  }
 
-    const data = await res.json();
-    const us = data.results.find((r: { iso_3166_1: string }) => r.iso_3166_1 === "US");
-    return us?.release_date[0]?.certification || null;
+  const data = await res.json();
+  return data.results;
 }
