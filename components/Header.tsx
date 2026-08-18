@@ -129,6 +129,15 @@ export default function Header() {
                     </motion.div>
 
                     <motion.div variants={desktopNavItemVariants}>
+                        <NavigationMenuItem className="text-lg relative group/genres">
+                        <Link href="/" className="relative inline-block py-1 transition group-hover/genres:text-[#01b4e4]">
+                            Genres
+                            <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-[#01b4e4] transition-all duration-300 group-hover/genres:w-full" />
+                        </Link>
+                        </NavigationMenuItem>
+                    </motion.div>
+
+                    <motion.div variants={desktopNavItemVariants}>
                         <NavigationMenuItem className="text-lg relative group/characters">
                         <Link href="/" className="relative inline-block py-1 transition group-hover/characters:text-[#01b4e4]">
                             People

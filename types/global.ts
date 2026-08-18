@@ -4,6 +4,28 @@ export interface Genre {
     name: string;
 }
 
+export type CastMember = {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+};
+
+export type CrewMember = {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+};
+
+export type CreditsType = {
+  id: number;
+  cast: CastMember[];
+  crew: CrewMember[];
+};
+
 export type VideoType = {
   id: string;
   key: string;

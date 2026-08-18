@@ -1,4 +1,4 @@
-import { MovieType, TvType, VideoType } from "@/types/global";
+import { CreditsType, MovieType, TvType, VideoType } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -117,4 +117,20 @@ export async function getMovieVideos(id: number) : Promise<VideoType[]> {
 
   const data = await res.json();
   return data.results;
+}
+
+export async function getMovieCredits(id: number): Promise<CreditsType> {
+  const res = await fetch(`${BASE_URL}/movie/${id}/credits?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch movie credits");
+  }
+
+  const data = await res.json();
+  return data;
 }
