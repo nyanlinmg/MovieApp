@@ -72,9 +72,23 @@ export interface MovieType {
 export interface TvType {
   id: number;
   name: string;
+  original_name: string;
   overview: string;
+  tagline: string | null;
+  first_air_date: string;
+  last_air_date: string | null;
+  episode_run_time: number[];
+  number_of_seasons: number;
+  number_of_episodes: number;
+  genres: Genre[];
+  vote_average: number;
+  vote_count: number;
   poster_path: string | null;
   backdrop_path: string | null;
-  first_air_date: string;
-  vote_average: number;
+  original_language: string;
+  popularity: number;
+  status: string;
+  adult: boolean;
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
 }

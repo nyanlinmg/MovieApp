@@ -134,3 +134,81 @@ export async function getMovieCredits(id: number): Promise<CreditsType> {
   const data = await res.json();
   return data;
 }
+
+export async function getMovieRecommendations(id: number): Promise<MovieType[]> {
+  const res = await fetch(`${BASE_URL}/movie/${id}/recommendations?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch movie recommendations");
+  }
+
+  const data = await res.json();
+  return data.results;
+}
+
+export async function getTvDetails(id: number): Promise<TvType> {
+  const res = await fetch(`${BASE_URL}/tv/${id}?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tv details");
+  }
+
+  return res.json();
+}
+
+export async function getTvVideos(id: number): Promise<VideoType[]> {
+  const res = await fetch(`${BASE_URL}/tv/${id}/videos?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tv videos");
+  }
+
+  const data = await res.json();
+  return data.results;
+}
+
+export async function getTvCredits(id: number): Promise<CreditsType> {
+  const res = await fetch(`${BASE_URL}/tv/${id}/credits?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tv credits");
+  }
+
+  return res.json();
+}
+
+export async function getTvRecommendations(id: number): Promise<TvType[]> {
+  const res = await fetch(`${BASE_URL}/tv/${id}/recommendations?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tv recommendations");
+  }
+
+  const data = await res.json();
+  return data.results as TvType[];
+}
