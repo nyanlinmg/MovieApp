@@ -39,7 +39,7 @@ export default function CastSection({ cast, id, basePath = "movie" }: CastSectio
               className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-[14%]"
             >
               <div className="rounded-lg overflow-hidden border-2 border-mist-600 bg-card">
-                <div className="relative aspect-[2/3] w-full bg-muted overflow-hidden">
+                <div className="relative aspect-2/3 w-full bg-muted overflow-hidden">
                   {actor.profile_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}

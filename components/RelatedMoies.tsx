@@ -40,7 +40,7 @@ export default function RelatedMovies({ movies, basePath = "movie" }: RelatedMov
             >
               <Link href={`/${basePath}/${item.id}`}>
                 <div className="rounded-lg overflow-hidden border border-white/10 bg-zinc-900">
-                  <div className="relative aspect-[2/3] w-full bg-zinc-800 overflow-hidden">
+                  <div className="relative aspect-2/3 w-full bg-zinc-800 overflow-hidden">
                     {item.poster_path ? (
                         <img 
                             src={`https://image.tmdb.org/t/p/w342${item.poster_path}`}
