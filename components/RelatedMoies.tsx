@@ -28,25 +28,24 @@ export default function RelatedMovies({ movies, basePath = "movie" }: RelatedMov
   if (!movies || movies.length === 0) return null;
 
   return (
-    <div className="w-full">
-      <h2 className="text-xl font-bold mb-4">Related {basePath === "tv" ? "Shows" : "Movies"}</h2>
+    <div className="w-full px-10 py-8">
+      <h2 className="text-3xl font-bold mb-6">Related {basePath === "tv" ? "Shows" : "Movies"}</h2>
 
-      <Carousel opts={{ align: "start" }} className="w-full">
+      <Carousel opts={{ align: "start" }} className="w-full px-12">
         <CarouselContent className="-ml-4">
           {movies.map((item) => (
             <CarouselItem
               key={item.id}
-              className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+              className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-[16%]"
             >
               <Link href={`/${basePath}/${item.id}`}>
                 <div className="rounded-lg overflow-hidden border border-white/10 bg-zinc-900">
-                  <div className="relative aspect-2/3 w-full bg-zinc-800 overflow-hidden">
+                  <div className="relative h-80 w-full bg-zinc-800 overflow-hidden">
                     {item.poster_path ? (
                         <img 
                             src={`https://image.tmdb.org/t/p/w342${item.poster_path}`}
                             alt={getTitle(item)}
-                            className="object-cover transition-transform duration-300 hover:scale-110"
-                            sizes="(max-width: 768px) 50vw, 200px"
+                            className="object-cover w-full h-full transition-transform duration-300 hover:scale-110"
                         />
                     ) : (
                       <img src="/no_profile.svg" alt="" className="w-full" />

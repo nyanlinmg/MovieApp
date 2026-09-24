@@ -25,7 +25,6 @@ export default function HeroSearch({ backdropUrl }: { backdropUrl: string }) {
         backgroundImage: `linear-gradient(rgba(3,37,65,0.75), rgba(3,37,65,0.92)), url(${backdropUrl})`,
       }}
     >
-      {/* One motion.div wraps everything - it all fades + slides in together */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
