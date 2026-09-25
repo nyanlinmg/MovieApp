@@ -1,6 +1,7 @@
 "use client"
 
-import { getUserApi, RegisterCredentials, registerUserApi } from "@/services/userServices";
+import { useApp } from "@/Provider/AppProvider";
+import { getUserApi, LoginCredentials, loginUserApi, RegisterCredentials, registerUserApi } from "@/services/userServices";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { error } from "console";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,29 @@ export const useGetUser = () => {
     });
 
     return {users, isLoadingUsers, usersError, refetchUsers}
+}
+
+export const useLoginUser = () => {
+    const router = useRouter();
+    const queryClient = useQueryClient();
+    const {setAuth} = useApp();
+
+    const mutation = useMutation({
+        mutationFn: ({email, password} : LoginCredentials) => loginUserApi({email, password}),
+        onSuccess: (data) => {
+            localStorage.setItem('token', data.token);
+            setAuth(data?.user);
+
+            setTimeout(() => {
+                router.push('/');
+            },1000);
+        },
+        onError: (error: Error) => {
+            console.log(error.message);
+        }
+    });
+
+    return mutation;
 }
 
 export const useRegisterUser = () => {

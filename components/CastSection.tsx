@@ -51,12 +51,21 @@ export default function CastSection({ cast, id, basePath = "movie" }: CastSectio
                   )}
                 </div>
                 <div className="p-3 bg-[#111827]">
-                  <p className="font-semibold text-sm leading-tight truncate">
+                  {actor.name ? 
+                    <p className="font-semibold text-sm leading-tight truncate">
                     {actor.name}
-                  </p>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {actor.character}
-                  </p>
+                    </p> : 
+                    <p className="font-semibold text-sm leading-tight truncate">unknown</p>
+                  }
+
+                  {actor.character ? 
+                    <p className="text-sm text-muted-foreground truncate">
+                      {actor.character}
+                    </p> :
+                    <p className="text-sm text-muted-foreground truncate">
+                      N/A
+                    </p>
+                  }
                 </div>
               </div>
             </CarouselItem>

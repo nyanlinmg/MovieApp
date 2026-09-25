@@ -1,5 +1,6 @@
 "use client"
 
+import apiClient from "@/lib/apiClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
@@ -24,6 +25,38 @@ export function AppProvider({children} : {children: ReactNode}) {
     const [auth, setAuth] = useState<User>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [queryClient] = useState(() => new QueryClient());
+    console.log(auth);
+
+    useEffect(() => {
+        async function verifyUser() {
+            const token = localStorage.getItem("token");
+            console.log(token);
+
+            if(!token) {
+                setAuthLoading(false);
+                return;
+            }
+
+            try{
+                const user = await apiClient('/api/users/verify', {
+                    method: 'GET'
+                });
+
+                if(user){
+                    setAuth(user);
+                }else{
+                    localStorage.removeItem("token");
+                }
+
+            }catch {
+                localStorage.removeItem("token");
+            }finally {
+                setAuthLoading(false);
+            }
+        }
+
+        verifyUser();
+    }, []);
 
     return (
         <QueryClientProvider client={queryClient}>

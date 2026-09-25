@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { AlertCircleIcon, Image } from "lucide-react";
+import { AlertCircleIcon, Image, Loader2 } from "lucide-react";
 
 export default function RegisterForm() {
 
@@ -193,12 +193,20 @@ export default function RegisterForm() {
                                 disabled={isPending}
                                 className="w-full cursor-pointer py-5 hover:bg-mist-200 hover:text-black text-lg transition"
                             >
-                                Register
+                                {isPending ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                        Loading...
+                                    </span>
+                                ) : (
+                                    "Register"
+                                )}
                             </Button>
 
                             <Button
                                 type="button"
                                 onClick={handleReset}
+                                disabled={isPending}
                                 className="w-full 
                                 cursor-pointer py-5 mt-2 text-lg hover:bg-mist-900 border hover:text-white transition"
                             >

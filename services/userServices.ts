@@ -26,3 +26,10 @@ export const registerUserApi = async ({name, email, username, password, image} :
         body: {name, email, username, password, image}
     })
 }
+
+export const loginUserApi = async ({email, password} : LoginCredentials) : Promise<{user: UserType, token:string}> => {
+    return apiClient('/api/auth/login', {
+        method: 'POST',
+        body: {email, password}
+    });
+}
