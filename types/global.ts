@@ -4,6 +4,27 @@ export interface Genre {
     name: string;
 }
 
+export type CompanyDetails = {
+    id: number;
+    name: string;
+    description?: string;
+    headquarters?: string;
+    homepage?: string;
+    logo_path: string | null;
+    origin_country: string;
+    parent_company?: { id: number; name: string; logo_path: string | null } | null;
+};
+
+export type StudioContentItem = {
+    id: number;
+    title?: string;      // movies
+    name?: string;       // tv shows
+    poster_path: string | null;
+    release_date?: string;
+    first_air_date?: string;
+    vote_average: number;
+};
+
 export interface UserType {
   id: number,
   name: string,

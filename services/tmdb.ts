@@ -1,4 +1,4 @@
-import { CreditsType, MovieType, TvType, VideoType } from "@/types/global";
+import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -28,6 +28,45 @@ export async function getTrendingTv() {
 
   const data = await res.json();
   return data.results as TvType[];
+}
+
+export async function getCompanyDetails(companyId: number): Promise<CompanyDetails> {
+  const res = await fetch(`${BASE_URL}/company/${companyId}`, {
+    headers: {Authorization: `Bearer ${TOKEN}`}
+  });
+
+  if(!res.ok) {
+    throw new Error("Failed to fetch company details");
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+export async function getCompanyMovies(companyId: number, page = 1, sortBy = "popularity.desc") : Promise<{results: StudioContentItem[]; total_pages: number; total_results: number}> {
+  const res = await fetch(`${BASE_URL}/discover/movie?with_companies=${companyId}&sort_by=${sortBy}&page=${page}`, {
+    headers: {Authorization: `Bearer ${TOKEN}`}
+  });
+
+  if(!res.ok) {
+    throw new Error("Failed to fetch movies");
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+export async function getCompanyTVShows(companyId: number, page = 1, sortBy = "popularity.desc") : Promise<{results: StudioContentItem[]; total_pages: number; total_results: number}> {
+  const res = await fetch(`${BASE_URL}/discover/tv?with_companies=${companyId}&sort_by=${sortBy}&page=${page}`, {
+    headers: {Authorization: `Bearer ${TOKEN}`}
+  });
+
+  if(!res.ok) {
+    throw new Error("Failed to fetch tv shows");
+  }
+
+  const data = await res.json();
+  return data;
 }
 
 export async function getPopularMovies() {

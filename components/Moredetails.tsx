@@ -1,4 +1,5 @@
 import { MovieType } from "@/types/global";
+import Link from "next/link";
 
 export function MoreDetail({ movie }: { movie: MovieType }) {
     const formatCurrency = (n: number) =>
@@ -75,12 +76,14 @@ export function MoreDetail({ movie }: { movie: MovieType }) {
                         <p className="mb-2 text-sm text-gray-400">Studios</p>
                         <div className="flex flex-wrap gap-2">
                             {movie.production_companies?.map((c) => (
-                                <span
+                                <Link
                                     key={c.id}
-                                    className="rounded-full border border-gray-600 px-3 py-1 font-mono text-xs"
+                                    title="see more details"
+                                    href={`/studio/${c.id}`}
+                                    className="rounded-full border border-gray-600 px-3 py-1 font-mono text-xs transition-colors hover:border-gray-400 hover:bg-gray-800 hover:underline"
                                 >
                                     {c.name}
-                                </span>
+                                </Link>
                             ))}
                         </div>
                     </div>
