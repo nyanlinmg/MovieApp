@@ -3,6 +3,7 @@
 import { TvType } from "@/types/global";
 import { motion } from "framer-motion";
 import { ScoreCircle } from "./ScoreCircle";
+import { BackButton } from "./BackButton";
 
 const image_url = "http://image.tmdb.org/t/p/w1280";
 const poster_url = "http://image.tmdb.org/t/p/w500";
@@ -29,11 +30,14 @@ export default function TvHero({ tv }: { tv: TvType }) {
                 </div>
 
                 {/* Content */}
+                <div className="relative z-10 pt-4 px-5 md:px-16">
+                    <BackButton />
+                </div>
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut", type: "spring", stiffness: 300, damping: 10 }}
-                    className="relative z-10 flex flex-col gap-8 px-8 py-16 md:flex-row md:px-16"
+                    className="relative z-10 flex flex-col gap-8 px-8 py-10 md:flex-row md:px-16"
                 >
                     {/* Poster */}
                     <div className="w-60 shrink-0 overflow-hidden rounded-lg shadow-xl md:w-70 h-90 md:h-100">

@@ -9,6 +9,7 @@ import {
 import { StudioContentCard } from "@/components/StudioContentCard";
 import { SortMenu } from "@/components/SortMenu";
 import { Pagination } from "@/components/Pagination";
+import { BackButton } from "@/components/BackButton";
 
 const MOVIE_SORT_FIELDS = [
     { label: "Popularity", value: "popularity" },
@@ -63,7 +64,8 @@ export default async function StudioPage({
         <div>
             {/* Header */}
             <div className="border-b border-gray-800 bg-[#0b1120] px-8 py-12 md:px-16">
-                <div className="flex flex-wrap items-center gap-6">
+                <BackButton />
+                <div className="flex flex-wrap items-center gap-6 mt-6">
                     <div className="flex h-20 w-40 items-center justify-center rounded bg-white p-3">
                         {company.logo_path ? (
                             <img
@@ -80,14 +82,14 @@ export default async function StudioPage({
                         )}
                     </div>
 
-                    <div>
+                    <div className="me-auto">
                         <h1 className="font-serif text-3xl font-bold md:text-4xl">
                             {company.name}
                         </h1>
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-400">
-                            {company.origin_country && <span>{company.origin_country}</span>}
-                            {company.headquarters && <span>{company.headquarters}</span>}
-                            {company.homepage && (
+                            {company.origin_country ? <span>{company.origin_country}</span> : <span>N/A</span>}
+                            {company.headquarters ? <span>{company.headquarters}</span> : <span>N/A</span>}
+                            {company.homepage ? (
                                 
                                 <a   href={company.homepage}
                                     target="_blank"
@@ -96,21 +98,23 @@ export default async function StudioPage({
                                 >
                                     Homepage
                                 </a>
-                            )}
+                            ) : <span>N/A</span>}
                         </div>
                     </div>
 
-                    <div className="ml-auto text-right">
-                        <p className="text-sm text-gray-400">Movies</p>
-                        <p className="font-mono text-2xl font-bold">
-                            {moviesRes.total_results?.toLocaleString() ?? "-"}
-                        </p>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-sm text-gray-400">TV Shows</p>
-                        <p className="font-mono text-2xl font-bold">
-                            {tvRes.total_results?.toLocaleString() ?? "-"}
-                        </p>
+                    <div className="flex gap-5 items-center">
+                        <div className="ml-auto text-right">
+                            <p className="text-sm text-gray-400">Movies</p>
+                            <p className="font-mono text-2xl font-bold">
+                                {moviesRes.total_results?.toLocaleString() ?? "N/A"}
+                            </p>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-sm text-gray-400">TV Shows</p>
+                            <p className="font-mono text-2xl font-bold">
+                                {tvRes.total_results?.toLocaleString() ?? "N/A"}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
