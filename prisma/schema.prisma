@@ -20,4 +20,33 @@ model User {
   password  String
   image     String?
   createdAt DateTime @default(now())
+  favorites Favorite[]
+  watchlist Watchlist[]
+}
+
+enum MediaType {
+  movie
+  tv
+}
+
+model Favorite {
+  id        Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  tmdbId    Int
+  mediaType MediaType
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+}
+
+model Watchlist {
+  id        Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  tmdbId    Int
+  mediaType MediaType
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
 }

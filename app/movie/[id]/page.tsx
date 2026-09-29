@@ -21,7 +21,7 @@ export default async function MovieDetail({
 
     return (
         <div>
-            <MovieHero movie={movie}/>
+            <MovieHero movie={movie} videos={videos}/>
             <MoreDetail movie={movie} />
             <Trailer videos={videos} movie={movie} />
             <CastSection cast={movieCredits?.cast} id={movie.id} basePath="movie" />

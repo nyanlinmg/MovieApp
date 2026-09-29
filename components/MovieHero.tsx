@@ -8,12 +8,21 @@ import { BackButton } from "./BackButton";
 const image_url = "http://image.tmdb.org/t/p/w1280";
 const poster_url = "http://image.tmdb.org/t/p/w500";
 
-export default function MovieHero({ movie}: { movie: MovieType}) {
+type TrailerVideo = {
+    key: string,
+    site: string,
+    type: string,
+    official: boolean
+}
+
+export default function MovieHero({ movie, videos }: { movie: MovieType; videos: TrailerVideo[]}) {
     const releaseDate = new Date(movie.release_date).toLocaleDateString("en-US", {
         month: "2-digit",
         day: "2-digit",
         year: "numeric",
     });
+
+    const trailer = videos?.find((v) => v.site === "YouTube" && v.type === "Trailer");
 
     const hours = Math.floor(movie.runtime / 60);
     const minutes = movie.runtime % 60;
