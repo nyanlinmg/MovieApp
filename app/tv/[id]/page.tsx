@@ -37,7 +37,7 @@ export default async function TvDetailsPage({ params }: TvDetailsPageProps) {
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Hero */}
-      <TvHero tv={tv} />
+      <TvHero tv={tv} videos={videos} />
 
       {/* More Details */}
       <TvMoreDetail tv={tv} />

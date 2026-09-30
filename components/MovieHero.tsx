@@ -4,6 +4,8 @@ import { MovieType } from "@/types/global";
 import { easeInOut, motion } from "framer-motion";
 import { ScoreCircle } from "./ScoreCircle";
 import { BackButton } from "./BackButton";
+import MovieActions from "./MovieActions";
+import { useApp } from "@/Provider/AppProvider";
 
 const image_url = "http://image.tmdb.org/t/p/w1280";
 const poster_url = "http://image.tmdb.org/t/p/w500";
@@ -27,6 +29,8 @@ export default function MovieHero({ movie, videos }: { movie: MovieType; videos:
     const hours = Math.floor(movie.runtime / 60);
     const minutes = movie.runtime % 60;
     const score = Math.round(movie.vote_average * 10);
+
+    const {auth} = useApp();
 
     return (
         <div>
@@ -88,6 +92,8 @@ export default function MovieHero({ movie, videos }: { movie: MovieType; videos:
                             <h2 className="mb-2 text-xl font-semibold">Overview</h2>
                             <p className="leading-relaxed text-gray-200">{movie.overview}</p>
                         </div>
+
+                        {auth && <MovieActions title={movie.title} trailerKey={trailer?.key} tmdbId={movie.id} mediaType="movie" />}
                     </div>
                 </motion.div>
             </div>

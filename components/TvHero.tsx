@@ -4,18 +4,30 @@ import { TvType } from "@/types/global";
 import { motion } from "framer-motion";
 import { ScoreCircle } from "./ScoreCircle";
 import { BackButton } from "./BackButton";
+import MovieActions from "./MovieActions";
+import { useApp } from "@/Provider/AppProvider";
 
 const image_url = "http://image.tmdb.org/t/p/w1280";
 const poster_url = "http://image.tmdb.org/t/p/w500";
 
-export default function TvHero({ tv }: { tv: TvType }) {
+type TrailerVideo = {
+    key: string,
+    site: string,
+    type: string,
+    official: boolean
+}
+
+export default function TvHero({ tv, videos }: { tv: TvType; videos: TrailerVideo[] }) {
     const firstAirDate = new Date(tv.first_air_date).toLocaleDateString("en-US", {
         month: "2-digit",
         day: "2-digit",
         year: "numeric",
     });
 
+    const trailer = videos?.find((v) => v.site === "YouTube" && v.type === "Trailer");
+
     const score = Math.round(tv.vote_average * 10);
+    const {auth} = useApp();
 
     return (
         <div>
@@ -80,6 +92,8 @@ export default function TvHero({ tv }: { tv: TvType }) {
                             <h2 className="mb-2 text-xl font-semibold">Overview</h2>
                             <p className="leading-relaxed text-gray-200">{tv.overview}</p>
                         </div>
+
+                        {auth && <MovieActions title={tv.name} trailerKey={trailer?.key} tmdbId={tv.id} mediaType="movie" />}
                     </div>
                 </motion.div>
             </div>
