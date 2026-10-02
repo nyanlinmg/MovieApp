@@ -40,6 +40,7 @@ export type CastMember = {
   character: string;
   profile_path: string | null;
   order: number;
+  credit_id: string
 };
 
 export type CrewMember = {

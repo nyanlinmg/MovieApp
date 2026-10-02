@@ -35,7 +35,7 @@ export default function CastSection({ cast, id, basePath = "movie" }: CastSectio
         <CarouselContent>
           {cast.map((actor) => (
             <CarouselItem
-              key={actor.id}
+              key={actor.credit_id}
               className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/3 lg:basis-1/5 xl:basis-[15%]"
             >
               <div className="rounded-lg overflow-hidden border-2 border-mist-600 bg-card">

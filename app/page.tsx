@@ -1,6 +1,7 @@
 import HeroSearch from "@/components/HeroSearch";
 import FilterableMovieSection from "@/components/FilterableMovieSection";
 import {
+  getLatestTrailers,
   getPopularMovies,
   getPopularTv,
   getTrendingMovies,
@@ -8,6 +9,7 @@ import {
   getUpcomingMovies,
   getUpcomingTv,
 } from "@/services/tmdb";
+import LatestTrailers from "@/components/LatestTrailers";
 
 const BACKDROP_BASE = "http://image.tmdb.org/t/p/original";
 
@@ -21,6 +23,7 @@ export default async function HomePage() {
     popularTv,
     upcomingMovies,
     upcomingTv,
+    latestTrailers,
   ] = await Promise.all([
     getTrendingMovies(),
     getTrendingTv(),
@@ -28,6 +31,7 @@ export default async function HomePage() {
     getPopularTv(),
     getUpcomingMovies(),
     getUpcomingTv(),
+    getLatestTrailers()
   ]);
 
   const withBackdrop = trendingMovies.filter((m) => m.backdrop_path);
@@ -46,6 +50,8 @@ export default async function HomePage() {
         movieViewAllHref="/movie/trending"
         tvViewAllHref="/tv/trending"
       />
+
+      <LatestTrailers trailers={latestTrailers} />
 
       <FilterableMovieSection
         title="Popular"

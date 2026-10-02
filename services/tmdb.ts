@@ -3,6 +3,30 @@ import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, Vide
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
+export async function getLatestTrailers() {
+  const movies = await getPopularMovies();
+  const trailers = [];
+
+  for(const movie of movies.slice(0, 12)) {
+    const videos = await getMovieVideos(movie.id);
+    const trailer = videos.find(
+      (v) => v.site === "YouTube" && v.type === "Trailer"
+    );
+
+    if(trailer) {
+      trailers.push({
+        id: movie.id,
+        title: movie.title,
+        image: movie.backdrop_path,
+        videoKey: trailer.key,
+        videoName: trailer.name
+      })
+    }
+  }
+
+  return trailers;
+}
+
 export async function getTrendingMovies() {
   const res = await fetch(`${BASE_URL}/trending/movie/week`, {
     headers: { Authorization: `Bearer ${TOKEN}` },
@@ -109,8 +133,6 @@ export async function getUpcomingMovies() {
 }
 
 export async function getUpcomingTv() {
-  // TMDB has no "upcoming" endpoint for TV shows, so we use discover
-  // and ask for shows that start airing today or later.
   const today = new Date().toISOString().split("T")[0];
   const res = await fetch(
     `${BASE_URL}/discover/tv?first_air_date.gte=${today}&sort_by=first_air_date.asc`,
