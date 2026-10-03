@@ -1,4 +1,4 @@
-import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType } from "@/types/global";
+import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType, PersonDetails } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -272,4 +272,22 @@ export async function getTvRecommendations(id: number): Promise<TvType[]> {
 
   const data = await res.json();
   return data.results as TvType[];
+}
+
+export async function getPerson(id: number) : Promise<PersonDetails> {
+  const res = await fetch(
+    `${BASE_URL}/person/${id}?language=en-US&append_to_response=combined_credits,external_ids`,
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        accept: "application/json"
+      }
+    }
+  );
+
+  if(!res.ok) {
+    throw new Error("Failed to fetch person details");
+  }
+
+  return res.json();
 }

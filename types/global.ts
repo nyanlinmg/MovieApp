@@ -43,6 +43,42 @@ export type CastMember = {
   credit_id: string
 };
 
+export type PersonCredit = {
+  id: number;
+  title?: string;   // movies
+  name?: string;    // tv shows
+  poster_path: string | null;
+  media_type: "movie" | "tv";
+  character?: string;
+  popularity: number;
+};
+
+export type PersonDetails = {
+  id: number;
+  name: string;
+  biography: string;
+  profile_path: string | null;
+  known_for_department: string;
+  gender: number;
+  birthday: string | null;
+  deathday: string | null;
+  place_of_birth: string | null;
+  also_known_as: string[];
+  homepage: string | null;
+  external_ids: {
+    instagram_id?: string | null;
+    twitter_id?: string | null;
+    facebook_id?: string | null;
+    tiktok_id?: string | null;
+    youtube_id?: string | null;
+    imdb_id?: string | null;
+  };
+  combined_credits: {
+    cast: PersonCredit[];
+    crew: PersonCredit[];
+  };
+};
+
 export type CrewMember = {
   id: number;
   name: string;

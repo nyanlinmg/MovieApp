@@ -10,16 +10,16 @@ export default function LatestTrailers({ trailers }: { trailers: any[] }) {
   const [selected, setSelected] = useState<any>(null);
 
   return (
-    <section className="bg-[#032541] relative overflow-hidden px-10 py-8">
+    <section className="bg-[#032542] relative overflow-hidden px-10 py-8">
         {trailers[0]?.image && (
             <img 
-                src={`https://image.tmdb.org/t/p/w1280${trailers[3].image}`}
+                src={`https://image.tmdb.org/t/p/w1280${trailers[2].image}`}
                 alt="backdrop_image"
                 className="object-cover absolute inset-0 h-full w-full"
             />
         )}
 
-        <div className="absolute inset-0 bg-[#032541]/85"></div>
+        <div className="absolute inset-0 bg-[#032541]/80"></div>
 
       <div className="relative z-10">
         <h2 className="mb-5 text-2xl font-semibold text-white">Latest Trailers</h2>
@@ -34,14 +34,14 @@ export default function LatestTrailers({ trailers }: { trailers: any[] }) {
                 className="w-93.75 shrink-0 cursor-pointer text-center text-white"
             >
                 <div className="relative h-52.5 overflow-hidden rounded-lg">
-                <img
-                    src={`https://image.tmdb.org/t/p/w780${t.image}`}
-                    alt={t.title}
-                    className="object-cover"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <Play className="h-12 w-12 text-white" />
-                </div>
+                  <img
+                      src={`https://image.tmdb.org/t/p/w780${t.image}`}
+                      alt={t.title}
+                      className="object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Play className="h-10 w-10 text-white" />
+                  </div>
                 </div>
                 <h3 className="mt-3 text-lg font-semibold">{t.title}</h3>
                 <p className="text-sm">{t.videoName}</p>
