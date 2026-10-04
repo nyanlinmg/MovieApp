@@ -4,6 +4,26 @@ export interface Genre {
     name: string;
 }
 
+export type PersonalInfoProps = {
+  department: string;
+  credits: number;
+  gender: number;
+  popularity: number;
+  birthday: string | null;
+  deathday: string | null;
+  placeOfBirth: string | null;
+  homepage: string | null;
+  alsoKnownAs: string[];
+  externalIds: {
+    instagram_id?: string | null;
+    twitter_id?: string | null;
+    facebook_id?: string | null;
+    tiktok_id?: string | null;
+    youtube_id?: string | null;
+    imdb_id?: string | null;
+  };
+};
+
 export type CompanyDetails = {
     id: number;
     name: string;
@@ -56,6 +76,7 @@ export type PersonCredit = {
 export type PersonDetails = {
   id: number;
   name: string;
+  popularity: number;
   biography: string;
   profile_path: string | null;
   known_for_department: string;

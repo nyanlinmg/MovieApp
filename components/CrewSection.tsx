@@ -1,0 +1,50 @@
+import Link from "next/link";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { CrewMember } from "@/types/global";
+
+export default function CrewSection({ crew }: { crew: CrewMember[] }) {
+  if (crew.length === 0) return null;
+
+  return (
+    <div className="w-full px-10 py-6">
+      <h2 className="mb-8 text-3xl font-bold">Crew</h2>
+
+      <Carousel opts={{ align: "start", dragFree: true }} className="w-full px-12">
+        <CarouselContent>
+          {crew.map((person) => (
+            <CarouselItem
+              key={`${person.id}-${person.job}`}
+              className="pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/5 xl:basis-[15%]"
+            >
+              <Link href={`/person/${person.id}`}>
+                <div className="overflow-hidden rounded-lg border-2 border-mist-600">
+                  <img
+                    src={
+                      person.profile_path
+                        ? `https://image.tmdb.org/t/p/w300${person.profile_path}`
+                        : "/no_profile.svg"
+                    }
+                    alt={person.name}
+                    className="h-65 w-full object-cover"
+                  />
+                  <div className="bg-[#111827] p-3">
+                    <p className="truncate text-sm font-semibold">{person.name}</p>
+                    <p className="truncate text-sm text-muted-foreground">{person.job}</p>
+                  </div>
+                </div>
+              </Link>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="left-0 bg-mist-600" />
+        <CarouselNext className="right-0 bg-mist-600" />
+      </Carousel>
+    </div>
+  );
+}

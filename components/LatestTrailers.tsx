@@ -2,15 +2,40 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Play } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+
+const cardContainerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24, scale: 0.95 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+};
 
 export default function LatestTrailers({ trailers }: { trailers: any[] }) {
   const [selected, setSelected] = useState<any>(null);
 
   return (
-    <section className="bg-[#032542] relative overflow-hidden px-10 py-8">
+    <motion.section 
+      initial={{opacity: 0, y: 24}}
+      whileInView={{opacity: 1, y: 0}}
+      viewport={{ amount: 0.2}}
+      transition={{ duration: 0.5}}
+      className="bg-[#032542] relative overflow-hidden px-10 py-8">
         {trailers[0]?.image && (
             <img 
                 src={`https://image.tmdb.org/t/p/w1280${trailers[2].image}`}
@@ -19,15 +44,21 @@ export default function LatestTrailers({ trailers }: { trailers: any[] }) {
             />
         )}
 
-        <div className="absolute inset-0 bg-[#032541]/80"></div>
+      <div className="absolute inset-0 bg-[#032541]/80"></div>
 
       <div className="relative z-10">
         <h2 className="mb-5 text-2xl font-semibold text-white">Latest Trailers</h2>
 
-        <div className="flex gap-5 overflow-x-auto pb-4">
+        <motion.div 
+          variants={cardContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{amount: 0.2}}
+          className="flex gap-5 overflow-x-auto pb-4">
             {trailers.map((t) => (
             <motion.div
                 key={t.id}
+                variants={cardVariants}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setSelected(t)}
@@ -47,7 +78,7 @@ export default function LatestTrailers({ trailers }: { trailers: any[] }) {
                 <p className="text-sm">{t.videoName}</p>
             </motion.div>
             ))}
-        </div>
+        </motion.div>
       </div>
 
       <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
@@ -71,6 +102,6 @@ export default function LatestTrailers({ trailers }: { trailers: any[] }) {
           )}
         </DialogContent>
       </Dialog>
-    </section>
+    </motion.section>
   );
 }

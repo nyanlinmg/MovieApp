@@ -38,36 +38,38 @@ export default function CastSection({ cast, id, basePath = "movie" }: CastSectio
               key={actor.credit_id}
               className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/3 lg:basis-1/5 xl:basis-[15%]"
             >
-              <div className="rounded-lg overflow-hidden border-2 border-mist-600 bg-card">
-                <div className="relative h-65 w-full bg-muted overflow-hidden">
-                  {actor.profile_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
-                      alt={actor.name}
-                      className="object-cover w-full h-full transition-transform duration-300 hover:scale-110 cursor-pointer"
-                    />
-                  ) : (
-                    <img src="/no_profile.svg" alt="" className="w-full h-full hover:scale-110 transition-transform duration-300 object-cover" />
-                  )}
-                </div>
-                <div className="p-3 bg-[#111827]">
-                  {actor.name ? 
-                    <p className="font-semibold text-sm leading-tight truncate">
-                    {actor.name}
-                    </p> : 
-                    <p className="font-semibold text-sm leading-tight truncate">unknown</p>
-                  }
+              <Link href={`/person/${actor.id}`}>  
+                  <div className="rounded-lg overflow-hidden border-2 border-mist-600 bg-card">
+                    <div className="relative h-65 w-full bg-muted overflow-hidden">
+                      {actor.profile_path ? (
+                        <img
+                          src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
+                          alt={actor.name}
+                          className="object-cover w-full h-full transition-transform duration-300 hover:scale-110 cursor-pointer"
+                        />
+                      ) : (
+                        <img src="/no_profile.svg" alt="" className="w-full h-full hover:scale-110 transition-transform duration-300 object-cover" />
+                      )}
+                    </div>
+                    <div className="p-3 bg-[#111827]">
+                      {actor.name ? 
+                        <p className="font-semibold text-sm leading-tight truncate">
+                        {actor.name}
+                        </p> : 
+                        <p className="font-semibold text-sm leading-tight truncate">unknown</p>
+                      }
 
-                  {actor.character ? 
-                    <p className="text-sm text-muted-foreground truncate">
-                      {actor.character}
-                    </p> :
-                    <p className="text-sm text-muted-foreground truncate">
-                      N/A
-                    </p>
-                  }
-                </div>
-              </div>
+                      {actor.character ? 
+                        <p className="text-sm text-muted-foreground truncate">
+                          {actor.character}
+                        </p> :
+                        <p className="text-sm text-muted-foreground truncate">
+                          N/A
+                        </p>
+                      }
+                    </div>
+                  </div>
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>

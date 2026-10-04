@@ -1,4 +1,5 @@
 import CastSection from "@/components/CastSection";
+import CrewSection from "@/components/CrewSection";
 import { MoreDetail } from "@/components/Moredetails";
 import MovieHero from "@/components/MovieHero";
 import RelatedMovies from "@/components/RelatedMoies";
@@ -19,12 +20,22 @@ export default async function MovieDetail({
         getMovieRecommendations(Number(id))
     ]);
 
+    const crew = movieCredits?.crew ?? [];
+
+    const directors = crew.filter((p) => p.job === "Director");
+    const writers = crew.filter((p) => p.job === "Screenplay" || p.job === "Writer");
+    const producers = crew.filter((p) => p.job === "Producer");
+    const composers = crew.filter((p) => p.job === "Original Music Composer");
+
+    const keyCrew = [...directors, ...writers, ...producers, ...composers].slice(0, 12);
+
     return (
         <div>
             <MovieHero movie={movie} videos={videos}/>
             <MoreDetail movie={movie} />
             <Trailer videos={videos} movie={movie} />
             <CastSection cast={movieCredits?.cast} id={movie.id} basePath="movie" />
+            <CrewSection crew={keyCrew} />
             <RelatedMovies movies={recommendations ?? []} basePath="movie" />
         </div>
     );
