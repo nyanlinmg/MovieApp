@@ -118,7 +118,7 @@ export default function PersonalInfo({
         <div className={cardStyle}>
           <p className="mb-2 text-sm text-muted-foreground">Also Known As</p>
           {alsoKnownAs.length === 0 ? (
-            <p className="mb-5 font-mono font-semibold">-</p>
+            <p className="mb-5 font-mono font-semibold">N/A</p>
           ) : (
             <div className="mb-5 flex flex-wrap gap-2">
               {alsoKnownAs.map((name) => (
@@ -131,7 +131,7 @@ export default function PersonalInfo({
 
           <p className="mb-2 text-sm text-muted-foreground">Links</p>
           {links.length === 0 ? (
-            <p className="font-mono font-semibold">-</p>
+            <p className="font-mono font-semibold">N/A</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {links.map((link) => (

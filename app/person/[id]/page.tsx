@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import { getPerson } from "@/services/tmdb";
+import { getPerson, getPersonCredits, getPersonImages } from "@/services/tmdb";
 import PersonHero from "@/components/PersonHero";
 import KnownFor from "@/components/KnownFor";
 import PersonalInfo from "@/components/PersonalInfo";
+import Filmography from "@/components/Filmography";
+import PhotoGallery from "@/components/PhotoGallery";
 
 export default async function PersonPage({
   params,
@@ -11,6 +13,8 @@ export default async function PersonPage({
 }) {
   const { id } = await params;
   const person = await getPerson(Number(id));
+  const credits = await getPersonCredits(Number(id));
+  const photos = await getPersonImages(Number(id));
 
   const allCredists = [
     ...person.combined_credits.cast,
@@ -51,6 +55,8 @@ export default async function PersonPage({
         alsoKnownAs={person.also_known_as}
         externalIds={person.external_ids}
       />
+      <Filmography credits={credits} />
+      <PhotoGallery photos={photos} />
     </main>
   );
 }

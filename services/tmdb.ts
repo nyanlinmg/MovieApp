@@ -3,6 +3,32 @@ import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, Vide
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
+export async function getPersonCredits(id: number) {
+  const res = await fetch(`${BASE_URL}/person/${id}/combined_credits?language=en-US`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch person credits");
+  }
+
+  const data = await res.json();
+  return data.cast;
+}
+
+export async function getPersonImages(id: number) {
+  const res = await fetch(`${BASE_URL}/person/${id}/images`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch person images");
+  }
+
+  const data = await res.json();
+  return data.profiles;
+}
+
 export async function getLatestTrailers() {
   const movies = await getPopularMovies();
   const trailers = [];
