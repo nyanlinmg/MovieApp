@@ -1,5 +1,6 @@
 import { MovieType } from "@/types/global";
 import Link from "next/link";
+import { Info } from "lucide-react";
 
 export function MoreDetail({ movie }: { movie: MovieType }) {
     const formatCurrency = (n: number) =>
@@ -7,7 +8,9 @@ export function MoreDetail({ movie }: { movie: MovieType }) {
 
     return (
         <div className="px-8 py-12 md:px-16">
-            <h2 className="mb-6 font-serif text-3xl font-bold">More Detail</h2>
+            <h2 className="mb-6 flex items-center gap-3 font-serif text-3xl font-bold">
+                More Detail <Info size={32} />
+            </h2>
 
             <div className="grid gap-6 md:grid-cols-3">
                 {/* Column 1 */}

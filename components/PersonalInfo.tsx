@@ -1,4 +1,5 @@
 import { PersonalInfoProps } from "@/types/global";
+import { User } from "lucide-react";
 
 // "1992-03-27" -> "March 27, 1992"
 function formatDate(date: string) {
@@ -96,7 +97,9 @@ export default function PersonalInfo({
 
   return (
     <section>
-      <h2 className="mb-6 text-3xl font-bold">Personal Info</h2>
+      <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold">
+        Personal Info <User size={32} />
+      </h2>
 
       <div className="grid gap-6 md:grid-cols-3">
         {/* Card 1: work info */}

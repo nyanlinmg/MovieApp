@@ -3,6 +3,38 @@ import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, Vide
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
+export async function getPersonAwards(imdbId: string | null) {
+  if(!imdbId) return [];
+
+  const query = `
+    SELECT ?awardLabel ?date WHERE {
+      ?person wdt:P345 "${imdbId}".
+      ?person p:P166 ?statement.
+      ?statement ps:P166 ?award.
+      OPTIONAL { ?statement pq:P585 ?date. }
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }
+  `;
+
+  try{
+    const res = await fetch(
+      `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(query)}`,
+      { headers: { "User-Agent": "MovieHub/1.0 (student project)" } }
+    );
+
+    if(!res.ok) return [];
+
+    const data = await res.json();
+
+    return data.results.bindings.map((item: any) => ({
+      name: item.awardLabel.value,
+      year: item.date ? item.date.value.slice(0, 4) : "",
+    }));
+  }catch {
+    return [];
+  }
+}
+
 export async function getPersonCredits(id: number) {
   const res = await fetch(`${BASE_URL}/person/${id}/combined_credits?language=en-US`, {
     headers: { Authorization: `Bearer ${TOKEN}` },

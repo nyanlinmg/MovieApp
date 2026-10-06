@@ -7,13 +7,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Link from "next/link";
+import { Star } from "lucide-react";
 
 export default function KnownFor({items} : {items: PersonCredit[]}) {
     if(items.length === 0) return null;
 
     return (
         <section>
-            <h2 className="mb-6 text-3xl font-bold text-white">Known For</h2>
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold">
+                Known For <Star size={32} />
+            </h2>
 
             <Carousel opts={{align: "start", dragFree: true}} className="w-full px-12">
                 <CarouselContent className="-ml-4">

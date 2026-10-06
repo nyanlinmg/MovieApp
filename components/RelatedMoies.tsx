@@ -1,6 +1,7 @@
 // components/movie/RelatedMovies.tsx
 import Image from "next/image";
 import Link from "next/link";
+import { Film } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -29,7 +30,9 @@ export default function RelatedMovies({ movies, basePath = "movie" }: RelatedMov
 
   return (
     <div className="w-full px-10 py-8">
-      <h2 className="text-3xl font-bold mb-6">Related {basePath === "tv" ? "Shows" : "Movies"}</h2>
+      <h2 className="text-3xl flex items-center gap-3 font-bold mb-6">Related {basePath === "tv" ? "Shows" : "Movies"}
+      <Film size={32} />
+    </h2>
 
       <Carousel opts={{ align: "start" }} className="w-full px-12">
         <CarouselContent className="-ml-4">

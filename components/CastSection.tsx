@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { CastMember } from "@/types/global";
+import { Users } from "lucide-react";
 
 interface CastSectionProps {
   cast: CastMember[];
@@ -23,7 +24,9 @@ export default function CastSection({ cast, id, basePath = "movie" }: CastSectio
   return (
     <div className="w-full px-10 py-6">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold">Top Billed Cast</h2>
+        <h2 className="text-3xl font-bold flex items-center gap-3">
+          Top Billed Cast <Users size={32} />
+        </h2>
         <Link href={`/${basePath}/${id}/cast`}>
           <Button variant="outline" className="bg-[#111827] px-5 py-4 border-mist-600 cursor-pointer" size="lg">
             View All

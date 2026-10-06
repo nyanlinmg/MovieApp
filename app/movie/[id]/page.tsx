@@ -35,7 +35,7 @@ export default async function MovieDetail({
             <MoreDetail movie={movie} />
             <Trailer videos={videos} movie={movie} />
             <CastSection cast={movieCredits?.cast} id={movie.id} basePath="movie" />
-            <CrewSection crew={keyCrew} />
+            <CrewSection crew={keyCrew} id={movie.id} basePath="movie" />
             <RelatedMovies movies={recommendations ?? []} basePath="movie" />
         </div>
     );

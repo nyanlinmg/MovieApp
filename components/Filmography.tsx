@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Film } from "lucide-react";
 import Link from "next/link";
 
 export default function Filmography({ credits }: { credits: any[] }) {
@@ -23,7 +24,9 @@ export default function Filmography({ credits }: { credits: any[] }) {
 
   return (
     <section>
-      <h2 className="mb-6 text-3xl font-bold">Filmography</h2>
+      <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold">
+        Filmography <Film size={32} />
+      </h2>
 
       {/* filter buttons */}
       <div className="mb-4 flex gap-2">

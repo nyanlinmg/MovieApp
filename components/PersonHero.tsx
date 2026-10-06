@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Biography from "./Biography";
 import { BackButton } from "./BackButton";
+import { BookOpen } from "lucide-react";
 
 type PersonHeroProps = {
   name: string;
@@ -35,7 +36,9 @@ export default function PersonHero({ name, profilePath, biography }: PersonHeroP
                     {name}
                 </h1>
 
-                <h2 className="mb-2 mt-6 text-xl font-semibold">Biography</h2>
+                <h2 className="mb-2 mt-6 flex items-center gap-3 text-xl font-semibold">
+                    Biography <BookOpen size={25} />
+                </h2>
                 <Biography text={biography} />
             </div>
         </section>

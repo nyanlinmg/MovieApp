@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Camera } from "lucide-react";
 
 export default function PhotoGallery({ photos }: { photos: any[] }) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -11,7 +12,9 @@ export default function PhotoGallery({ photos }: { photos: any[] }) {
 
   return (
     <section>
-      <h2 className="mb-6 text-3xl font-bold">Photo Gallery</h2>
+      <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold">
+        Photo Gallery <Camera size={32} />
+      </h2>
 
         <div className="flex gap-5 overflow-x-auto pb-4">
         {photos.map((photo) => (
