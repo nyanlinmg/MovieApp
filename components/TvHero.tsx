@@ -6,6 +6,7 @@ import { ScoreCircle } from "./ScoreCircle";
 import { BackButton } from "./BackButton";
 import MovieActions from "./MovieActions";
 import { useApp } from "@/Provider/AppProvider";
+import Link from "next/link";
 
 const image_url = "http://image.tmdb.org/t/p/w1280";
 const poster_url = "http://image.tmdb.org/t/p/w500";
@@ -43,7 +44,9 @@ export default function TvHero({ tv, videos }: { tv: TvType; videos: TrailerVide
 
                 {/* Content */}
                 <div className="relative z-10 pt-4 px-5 md:px-16">
-                    <BackButton />
+                    <Link href="/" className="inline-block text-cyan-400 hover:underline">
+                        ← Back to home page
+                    </Link>
                 </div>
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

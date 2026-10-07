@@ -28,7 +28,7 @@ export function Pagination({
             <button
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage <= 1}
-                className="rounded border border-gray-700 px-3 py-1 text-sm disabled:opacity-40"
+                className="rounded border cursor-pointer border-gray-700 px-3 py-1 text-sm disabled:opacity-40"
             >
                 Prev
             </button>
@@ -38,7 +38,7 @@ export function Pagination({
             <button
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage >= totalPages}
-                className="rounded border border-gray-700 px-3 py-1 text-sm disabled:opacity-40"
+                className="rounded border cursor-pointer border-gray-700 px-3 py-1 text-sm disabled:opacity-40"
             >
                 Next
             </button>

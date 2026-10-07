@@ -22,7 +22,7 @@ export default function CrewSection({ crew, id, basePath = "movie" } : CrewSecti
   return (
     <div className="w-full px-10 py-6">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="mb-8 text-3xl font-bold flex items-center gap-3">
+        <h2 className="text-3xl font-bold flex items-center gap-3">
           Crew Members <Clapperboard size={32} />
         </h2>
 
