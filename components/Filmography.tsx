@@ -19,6 +19,8 @@ export default function Filmography({ credits }: { credits: any[] }) {
     return dateB.localeCompare(dateA);
   });
 
+  if(!sorted.length) return;
+
   const activeButton = "rounded-full bg-cyan-500 px-4 py-1 cursor-pointer";
   const normalButton = "rounded-full border px-4 py-1 cursor-pointer";
 

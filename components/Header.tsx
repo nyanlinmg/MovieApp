@@ -204,7 +204,7 @@ export default function Header() {
                 <SheetHeader className="border-b border-b-[#01b4e4]/20">
                   <SheetTitle className="text-white flex text-xl items-center gap-2">
                     <TvMinimalPlayIcon size={28} className="text-[#01b4e4]" />
-                    Anime HUB
+                    Movie HUB
                   </SheetTitle>
                 </SheetHeader>
 
@@ -234,15 +234,23 @@ export default function Header() {
 
                     <motion.div variants={navItemVariants}>
                       <SheetClose asChild>
-                        <Link href="/browse" className="block hover:text-[#01b4e4] transition px-2 py-1">
-                          Browse
+                        <Link href="/" className="block hover:text-[#01b4e4] transition px-2 py-1">
+                          Movies
                         </Link>
                       </SheetClose>
                     </motion.div>
 
                     <motion.div variants={navItemVariants}>
                       <SheetClose asChild>
-                        <Link href="/genres" className="block hover:text-[#01b4e4] transition px-2 py-1">
+                        <Link href="/" className="block hover:text-[#01b4e4] transition px-2 py-1">
+                          Tv Shows
+                        </Link>
+                      </SheetClose>
+                    </motion.div>
+
+                    <motion.div variants={navItemVariants}>
+                      <SheetClose asChild>
+                        <Link href="/" className="block hover:text-[#01b4e4] transition px-2 py-1">
                           Genres
                         </Link>
                       </SheetClose>
@@ -250,8 +258,8 @@ export default function Header() {
 
                     <motion.div variants={navItemVariants}>
                       <SheetClose asChild>
-                        <Link href="/characters" className="block hover:text-[#01b4e4] transition px-2 py-1">
-                          Characters
+                        <Link href="/" className="block hover:text-[#01b4e4] transition px-2 py-1">
+                          People
                         </Link>
                       </SheetClose>
                     </motion.div>
