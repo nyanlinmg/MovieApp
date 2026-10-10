@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MenuIcon, TvMinimalPlayIcon } from "lucide-react";
+import { MenuIcon, TvMinimalPlayIcon, ChevronDown } from "lucide-react";
 import { useApp } from "@/Provider/AppProvider";
 import { Button } from "./ui/button";
 import {
@@ -21,6 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import { useState } from "react";
 
 /* ---------- STEP 1: menu data (edit links here) ---------- */
 const navMenus = [
@@ -64,6 +65,7 @@ const navMenus = [
 export default function Header() {
   const router = useRouter();
   const { auth, setAuth } = useApp();
+  const [openMenu, setOpenMenu] = useState("");
 
   /* ---------- STEP 2: logout ---------- */
   const handleLogOut = () => {
@@ -108,18 +110,20 @@ export default function Header() {
             {/* Movies, TV Shows, Genres, People dropdowns */}
             {navMenus.map((menu) => (
               <NavigationMenuItem key={menu.name} className="relative">
-                <NavigationMenuTrigger className="bg-transparent px-2 text-lg font-normal text-white hover:bg-transparent hover:text-[#01b4e4] focus:bg-transparent focus:text-[#01b4e4] data-[state=open]:bg-transparent data-[state=open]:text-[#01b4e4]">
+                  <NavigationMenuTrigger className="bg-transparent px-2 text-lg font-normal text-white hover:bg-transparent hover:text-[#01b4e4] focus:bg-transparent focus:text-[#01b4e4] data-[state=open]:bg-transparent data-[state=open]:text-[#01b4e4] data-[state=open]:hover:bg-transparent data-[state=open]:focus:bg-transparent">
                   {menu.name}
                 </NavigationMenuTrigger>
 
-                <NavigationMenuContent className="bg-white text-black">
+                <NavigationMenuContent className="group-data-[viewport=false]/navigation-menu:border-[#01b4e4]/20 group-data-[viewport=false]/navigation-menu:bg-[#032541] group-data-[viewport=false]/navigation-menu:text-white">
                   <ul className="w-44 p-1">
                     {menu.links.map((link) => (
                       <li key={link.href}>
-                        <NavigationMenuLink asChild>
+                        <NavigationMenuLink 
+                        asChild
+                        className="text-white hover:bg-[#01b4e4]/20 hover:text-[#01b4e4] focus:bg-[#01b4e4]/20 focus:text-[#01b4e4] data-[active=true]:bg-[#01b4e4]/20">
                           <Link
                             href={link.href}
-                            className="block rounded-md px-3 py-2 text-base hover:bg-gray-100 hover:text-[#01b4e4]"
+                            className="block rounded-md px-3 py-2 text-base"
                           >
                             {link.label}
                           </Link>
@@ -160,8 +164,8 @@ export default function Header() {
           {/* mobile menu */}
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
-              <Button size="icon" variant="default">
-                <MenuIcon className="size-5" />
+              <Button size="lg" variant="default" className="cursor-pointer hover:scale-15 transition-all duration-150">
+                <MenuIcon className="size-6" />
               </Button>
             </SheetTrigger>
 
@@ -173,7 +177,7 @@ export default function Header() {
                 </SheetTitle>
               </SheetHeader>
 
-              <nav className="mt-6 flex flex-col gap-2 px-4 text-lg">
+              <nav className="mt-6 flex flex-col gap-1 px-4 text-lg">
                 <SheetClose asChild>
                   <Link href="/" className="px-2 py-1 hover:text-[#01b4e4]">Home</Link>
                 </SheetClose>
@@ -185,11 +189,35 @@ export default function Header() {
                 )}
 
                 {navMenus.map((menu) => (
-                  <SheetClose asChild key={menu.name}>
-                    <Link href={menu.links[0].href} className="px-2 py-1 hover:text-[#01b4e4]">
+                  <div key={menu.name}>
+                    {/* the heading: tap to open or close */}
+                    <button
+                      onClick={() => setOpenMenu(openMenu === menu.name ? "" : menu.name)}
+                      className="flex w-full cursor-pointer items-center justify-between px-2 py-1 hover:text-[#01b4e4]"
+                    >
                       {menu.name}
-                    </Link>
-                  </SheetClose>
+                      <ChevronDown
+                        size={18}
+                        className={`transition-transform ${openMenu === menu.name ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {/* the links: only shown when this menu is open */}
+                    {openMenu === menu.name && (
+                      <div className="ml-4 border-l border-[#01b4e4]/30 pl-3">
+                        {menu.links.map((link) => (
+                          <SheetClose asChild key={link.href}>
+                            <Link
+                              href={link.href}
+                              className="block py-1 text-base text-white/80 hover:text-[#01b4e4]"
+                            >
+                              {link.label}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </nav>
 
