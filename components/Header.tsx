@@ -77,7 +77,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full border-b border-b-[#01b4e4]/20 bg-[#032541]">
+    <header className="sticky top-0 z-50 w-full border-b border-b-[#01b4e4]/20 bg-[#032541]">
       <div className="flex h-18 items-center justify-between px-6 text-white">
         {/* ---------- STEP 3: logo ---------- */}
         <Link
@@ -93,7 +93,7 @@ export default function Header() {
           <NavigationMenuList className="gap-4">
             {/* Home */}
             <NavigationMenuItem>
-              <Link href="/" className="px-2 py-1 text-lg transition hover:text-[#01b4e4]">
+              <Link href="/" className="px-2 py-1 text-lg transition hover:text-[#01b4e4] cursor-pointer">
                 Home
               </Link>
             </NavigationMenuItem>
@@ -101,7 +101,7 @@ export default function Header() {
             {/* Profile (only when logged in) */}
             {auth && (
               <NavigationMenuItem>
-                <Link href="/profile" className="px-2 py-1 text-lg transition hover:text-[#01b4e4]">
+                <Link href="/profile" className="px-2 py-1 text-lg transition hover:text-[#01b4e4] cursor-pointer">
                   Profile
                 </Link>
               </NavigationMenuItem>
@@ -110,7 +110,7 @@ export default function Header() {
             {/* Movies, TV Shows, Genres, People dropdowns */}
             {navMenus.map((menu) => (
               <NavigationMenuItem key={menu.name} className="relative">
-                  <NavigationMenuTrigger className="bg-transparent px-2 text-lg font-normal text-white hover:bg-transparent hover:text-[#01b4e4] focus:bg-transparent focus:text-[#01b4e4] data-[state=open]:bg-transparent data-[state=open]:text-[#01b4e4] data-[state=open]:hover:bg-transparent data-[state=open]:focus:bg-transparent">
+                  <NavigationMenuTrigger className="bg-transparent px-2 text-lg font-normal text-white hover:bg-transparent hover:text-[#01b4e4] focus:bg-transparent focus:text-[#01b4e4] data-[state=open]:bg-transparent data-[state=open]:text-[#01b4e4] data-[state=open]:hover:bg-transparent data-[state=open]:focus:bg-transparent cursor-pointer">
                   {menu.name}
                 </NavigationMenuTrigger>
 
@@ -123,7 +123,7 @@ export default function Header() {
                         className="text-white hover:bg-[#01b4e4]/20 hover:text-[#01b4e4] focus:bg-[#01b4e4]/20 focus:text-[#01b4e4] data-[active=true]:bg-[#01b4e4]/20">
                           <Link
                             href={link.href}
-                            className="block rounded-md px-3 py-2 text-base"
+                            className="block rounded-md px-3 py-2 text-base cursor-pointer"
                           >
                             {link.label}
                           </Link>
@@ -144,12 +144,12 @@ export default function Header() {
             {!auth ? (
               <>
                 <Link href="/login">
-                  <Button variant="link" className="text-white hover:text-[#01b4e4]">
+                  <Button variant="link" className="text-white hover:text-[#01b4e4] cursor-pointer">
                     Log in
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button className="bg-[#01b4e4] text-white hover:bg-[#01b4e4]/80">
+                  <Button className="bg-[#01b4e4] text-white hover:bg-[#01b4e4]/80 cursor-pointer">
                     Sign up
                   </Button>
                 </Link>
@@ -164,7 +164,7 @@ export default function Header() {
           {/* mobile menu */}
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
-              <Button size="lg" variant="default" className="cursor-pointer hover:scale-15 transition-all duration-150">
+              <Button size="lg" variant="default" className="cursor-pointer hover:scale-110 transition-all duration-150">
                 <MenuIcon className="size-6" />
               </Button>
             </SheetTrigger>
@@ -226,17 +226,17 @@ export default function Header() {
                   <>
                     <SheetClose asChild>
                       <Link href="/login">
-                        <Button className="w-full bg-[#01b4e4]/20 text-white">Log in</Button>
+                        <Button className="w-full bg-[#01b4e4]/20 text-white cursor-pointer">Log in</Button>
                       </Link>
                     </SheetClose>
                     <SheetClose asChild>
                       <Link href="/register">
-                        <Button className="w-full bg-[#01b4e4] text-white">Sign up</Button>
+                        <Button className="w-full bg-[#01b4e4] text-white cursor-pointer">Sign up</Button>
                       </Link>
                     </SheetClose>
                   </>
                 ) : (
-                  <Button onClick={handleLogOut} variant="destructive" className="w-full">
+                  <Button onClick={handleLogOut} variant="destructive" className="w-full cursor-pointer">
                     Log out
                   </Button>
                 )}

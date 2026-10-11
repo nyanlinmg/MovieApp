@@ -1,7 +1,67 @@
-import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType, PersonDetails } from "@/types/global";
+import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType, PersonDetails, Genre } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
+
+export type DiscoverFilters = {
+  sortBy?: string;
+  genres?: string;
+  minRating?: string;
+  yearFrom?: string;
+  yearTo?: string;
+  page?: number
+};
+
+export async function getDiscover(
+  type: "movie" | "tv",
+  filters: DiscoverFilters = {}
+): Promise<{ results: StudioContentItem[]; total_pages: number; total_results: number}> {
+
+  const dateField = type === "movie" ? "primary_release_date" : "first_air_data";
+
+  const sortBy = (filters.sortBy || "popularity.desc").replace(/^date\./, `${dateField}.`);
+
+  const params = new URLSearchParams({
+    language: "en-US",
+    sort_by: sortBy,
+    page: String(filters.page || 1)
+  });
+
+  if (filters.genres) params.set("with_genres", filters.genres);
+  if (filters.minRating) params.set("vote_average.gte", filters.minRating);
+  if (filters.yearFrom) params.set(`${dateField}.gte`, `${filters.yearFrom}-01-01`);
+  if (filters.yearTo) params.set(`${dateField}.lte`, `${filters.yearTo}-12-31`);
+
+  if(sortBy.startsWith("vote_average")) params.set("vote_count.gte", "200");
+
+  const res = await fetch(`${BASE_URL}/discover/${type}?${params.toString()}`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch discover list");
+  }
+
+  const data = await res.json();
+  return {
+    results: data.results,
+    total_pages: Math.min(data.total_pages, 500),
+    total_results: data.total_results,
+  };
+}
+
+export async function getGenres(type: "movie" | "tv"): Promise<Genre[]> {
+  const res = await fetch(`${BASE_URL}/genre/${type}/list?language=en`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch genres");
+  }
+
+  const data = await res.json();
+  return data.genres;
+}
 
 export async function getPersonAwards(imdbId: string | null) {
   if(!imdbId) return [];
