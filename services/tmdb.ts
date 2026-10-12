@@ -9,7 +9,8 @@ export type DiscoverFilters = {
   minRating?: string;
   yearFrom?: string;
   yearTo?: string;
-  page?: number
+  page?: number;
+  extra?: Record<string, string>
 };
 
 export async function getDiscover(
@@ -26,6 +27,12 @@ export async function getDiscover(
     sort_by: sortBy,
     page: String(filters.page || 1)
   });
+
+  if(filters.extra) {
+    for(const key in filters.extra) {
+      params.set(key, filters.extra[key]);
+    }
+  }
 
   if (filters.genres) params.set("with_genres", filters.genres);
   if (filters.minRating) params.set("vote_average.gte", filters.minRating);

@@ -17,11 +17,13 @@ export default async function DiscoverPage({
   title,
   type,
   defaultSort = "popularity.desc",
+  extra,
   sp,
 }: {
   title: string;
   type: "movie" | "tv";
   defaultSort?: string;
+  extra?: Record<string, string>;
   sp: DiscoverSearchParams;
 }) {
   // the URL choice wins, otherwise use this page's default
@@ -37,6 +39,7 @@ export default async function DiscoverPage({
       yearFrom: sp.yearFrom,
       yearTo: sp.yearTo,
       page,
+      extra
     }),
     getGenres(type),
   ]);
