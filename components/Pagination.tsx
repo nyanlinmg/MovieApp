@@ -7,7 +7,7 @@ export function Pagination({
     currentPage,
     totalPages,
 }: {
-    paramPrefix: "movie" | "tv";
+    paramPrefix: "movie" | "tv" | "person";
     currentPage: number;
     totalPages: number;
 }) {

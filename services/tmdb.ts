@@ -18,7 +18,7 @@ export async function getDiscover(
   filters: DiscoverFilters = {}
 ): Promise<{ results: StudioContentItem[]; total_pages: number; total_results: number}> {
 
-  const dateField = type === "movie" ? "primary_release_date" : "first_air_data";
+  const dateField = type === "movie" ? "primary_release_date" : "first_air_date";
 
   const sortBy = (filters.sortBy || "popularity.desc").replace(/^date\./, `${dateField}.`);
 
@@ -415,4 +415,29 @@ export async function getPerson(id: number) : Promise<PersonDetails> {
   }
 
   return res.json();
+}
+
+export async function getPopularPeople(page = 1) {
+  const res = await fetch(
+    `${BASE_URL}/person/popular?language=en-US&page=${page}`,
+    {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch popular people");
+  }
+
+  const data = await res.json();
+
+  return {
+    results: data.results as {
+      id: number;
+      name: string;
+      known_for_department: string;
+      profile_path: string | null;
+    }[],
+    total_pages: Math.min(data.total_pages, 500),
+  };
 }

@@ -29,7 +29,7 @@ const navMenus = [
     name: "Movies",
     links: [
       { label: "Popular", href: "/movie/popular" },
-      { label: "Trending", href: "/movie/trending" },
+      { label: "Now Playing", href: "/movie/now-playing" },
       { label: "Upcoming", href: "/movie/upcoming" },
       { label: "Top Rated", href: "/movie/top-rated" },
     ],
@@ -38,9 +38,10 @@ const navMenus = [
     name: "TV Shows",
     links: [
       { label: "Popular", href: "/tv/popular" },
-      { label: "Trending", href: "/tv/trending" },
+      { label: "Upcoming", href: "/tv/upcoming" },
       { label: "Top Rated", href: "/tv/top-rated" },
       { label: "On TV", href: "/tv/on-the-air" },
+      { label: "Airing Today", href: "/tv/airing-today" },
     ],
   },
   {
