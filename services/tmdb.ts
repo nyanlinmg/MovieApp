@@ -1,4 +1,4 @@
-import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType, PersonDetails, Genre } from "@/types/global";
+import { CompanyDetails, CreditsType, MovieType, StudioContentItem, TvType, VideoType, PersonDetails, Genre, SearchSuggestion } from "@/types/global";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -12,6 +12,90 @@ export type DiscoverFilters = {
   page?: number;
   extra?: Record<string, string>
 };
+
+type MovieSearchItem = {
+  id: number;
+  title?: string;
+  poster_path: string | null;
+  release_date?: string;
+  vote_average?: number;
+};
+
+type TvSearchItem = {
+  id: number;
+  name?: string;
+  poster_path: string | null;
+  first_air_date?: string;
+  vote_average?: number;
+};
+
+type AwardBinding = {
+  awardLabel: { value: string };
+  date?: { value: string };
+};
+
+function getYear(date?: string) {
+  return date ? date.slice(0, 4) : "N/A";
+}
+
+function createSearchParams(query: string, page = 1) {
+  return new URLSearchParams({
+    query,
+    include_adult: "false",
+    language: "en-US",
+    page: String(page),
+  });
+}
+
+function toMovieItem(movie: MovieSearchItem): StudioContentItem {
+  return {
+    id: movie.id,
+    title: movie.title || "Untitled",
+    poster_path: movie.poster_path,
+    release_date: movie.release_date || "",
+    vote_average: movie.vote_average ?? 0,
+  };
+}
+
+function toTvItem(show: TvSearchItem): StudioContentItem {
+  return {
+    id: show.id,
+    name: show.name || "Untitled",
+    poster_path: show.poster_path,
+    first_air_date: show.first_air_date || "",
+    vote_average: show.vote_average ?? 0,
+  };
+}
+
+async function fetchMovieSearch(query: string, page = 1) {
+  const params = createSearchParams(query, page);
+
+  const res = await fetch(`${BASE_URL}/search/movie?${params.toString()}`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch movie search results");
+  }
+
+  const data = await res.json();
+  return data.results as MovieSearchItem[];
+}
+
+async function fetchTvSearch(query: string, page = 1) {
+  const params = createSearchParams(query, page);
+
+  const res = await fetch(`${BASE_URL}/search/tv?${params.toString()}`, {
+    headers: { Authorization: `Bearer ${TOKEN}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch tv search results");
+  }
+
+  const data = await res.json();
+  return data.results as TvSearchItem[];
+}
 
 export async function getDiscover(
   type: "movie" | "tv",
@@ -70,6 +154,64 @@ export async function getGenres(type: "movie" | "tv"): Promise<Genre[]> {
   return data.genres;
 }
 
+export async function getSearchResults(query: string): Promise<{
+  movies: StudioContentItem[];
+  tvShows: StudioContentItem[];
+}> {
+  const cleanQuery = query.trim();
+
+  if (!cleanQuery) {
+    return { movies: [], tvShows: [] };
+  }
+
+  const [movieResults, tvResults] = await Promise.all([
+    fetchMovieSearch(cleanQuery),
+    fetchTvSearch(cleanQuery),
+  ]);
+
+  return {
+    movies: movieResults.map(toMovieItem),
+    tvShows: tvResults.map(toTvItem),
+  };
+}
+
+export async function getSearchSuggestions(query: string): Promise<SearchSuggestion[]> {
+  const cleanQuery = query.trim().toLowerCase();
+
+  if (!cleanQuery) return [];
+
+  const pages = cleanQuery.length <= 2 ? [1, 2, 3] : [1];
+  const [moviePages, tvPages] = await Promise.all([
+    Promise.all(pages.map((page) => fetchMovieSearch(query, page))),
+    Promise.all(pages.map((page) => fetchTvSearch(query, page))),
+  ]);
+
+  const movies = moviePages.flat().map(toMovieItem);
+  const tvShows = tvPages.flat().map(toTvItem);
+
+  const movieSuggestions = movies
+    .map((movie) => ({
+      id: movie.id,
+      title: movie.title || "Untitled",
+      mediaType: "movie" as const,
+      poster_path: movie.poster_path,
+      year: getYear(movie.release_date),
+    }))
+    .filter((movie) => movie.title.toLowerCase().startsWith(cleanQuery));
+
+  const tvSuggestions = tvShows
+    .map((show) => ({
+      id: show.id,
+      title: show.name || "Untitled",
+      mediaType: "tv" as const,
+      poster_path: show.poster_path,
+      year: getYear(show.first_air_date),
+    }))
+    .filter((show) => show.title.toLowerCase().startsWith(cleanQuery));
+
+  return [...movieSuggestions, ...tvSuggestions].slice(0, 8);
+}
+
 export async function getPersonAwards(imdbId: string | null) {
   if(!imdbId) return [];
 
@@ -93,7 +235,7 @@ export async function getPersonAwards(imdbId: string | null) {
 
     const data = await res.json();
 
-    return data.results.bindings.map((item: any) => ({
+    return data.results.bindings.map((item: AwardBinding) => ({
       name: item.awardLabel.value,
       year: item.date ? item.date.value.slice(0, 4) : "",
     }));
@@ -438,6 +580,6 @@ export async function getPopularPeople(page = 1) {
       known_for_department: string;
       profile_path: string | null;
     }[],
-    total_pages: Math.min(data.total_pages, 500),
+    total_pages: Math.min(data.total_pages, 100),
   };
 }

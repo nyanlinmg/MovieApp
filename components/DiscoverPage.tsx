@@ -2,6 +2,7 @@ import { getDiscover, getGenres } from "@/services/tmdb";
 import { StudioContentCard } from "@/components/StudioContentCard";
 import { Pagination } from "@/components/Pagination";
 import FilterPanel from "@/components/FilterPanel";
+import { BackButton } from "./BackButton";
 
 export type DiscoverSearchParams = {
   sortBy?: string;
@@ -46,7 +47,9 @@ export default async function DiscoverPage({
 
   return (
     <div className="px-6 py-10 md:px-12">
-      {/* heading */}
+      <div>
+        <BackButton />
+      </div>
       <h1 className="bg-linear-to-r from-white to-cyan-300 bg-clip-text font-serif text-4xl font-bold text-transparent">
         {title}
       </h1>
@@ -55,7 +58,6 @@ export default async function DiscoverPage({
       </p>
 
       <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
-        {/* left: filters (stays in view while you scroll) */}
         <div className="lg:sticky lg:top-6 lg:self-start">
           <FilterPanel
             genres={genres}
@@ -69,7 +71,6 @@ export default async function DiscoverPage({
           />
         </div>
 
-        {/* right: posters */}
         <div>
           {data.results.length ? (
             <>

@@ -45,6 +45,14 @@ export type StudioContentItem = {
     vote_average: number;
 };
 
+export type SearchSuggestion = {
+    id: number;
+    title: string;
+    mediaType: "movie" | "tv";
+    poster_path: string | null;
+    year: string;
+};
+
 export interface UserType {
   id: number,
   name: string,

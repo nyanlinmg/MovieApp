@@ -47,14 +47,25 @@ const navMenus = [
   {
     name: "Genres",
     links: [
-      { label: "Action", href: "/genre/28" },
-      { label: "Animation", href: "/genre/16" },
-      { label: "Comedy", href: "/genre/35" },
-      { label: "Drama", href: "/genre/18" },
-      { label: "Horror", href: "/genre/27" },
-      { label: "Romance", href: "/genre/10749" },
-      { label: "Sci-Fi", href: "/genre/878" },
-      { label: "Thriller", href: "/genre/53" },
+      { label: "Action", href: "/movie/popular?genres=28" },
+      { label: "Adventure", href: "/movie/popular?genres=12" },
+      { label: "Animation", href: "/movie/popular?genres=16" },
+      { label: "Comedy", href: "/movie/popular?genres=35" },
+      { label: "Crime", href: "/movie/popular?genres=80" },
+      { label: "Documentary", href: "/movie/popular?genres=99" },
+      { label: "Drama", href: "/movie/popular?genres=18" },
+      { label: "Family", href: "/movie/popular?genres=10751" },
+      { label: "Fantasy", href: "/movie/popular?genres=14" },
+      { label: "History", href: "/movie/popular?genres=36" },
+      { label: "Horror", href: "/movie/popular?genres=27" },
+      { label: "Music", href: "/movie/popular?genres=10402" },
+      { label: "Mystery", href: "/movie/popular?genres=9648" },
+      { label: "Romance", href: "/movie/popular?genres=10749" },
+      { label: "Sci-Fi", href: "/movie/popular?genres=878" },
+      { label: "TV Movie", href: "/movie/popular?genres=10770" },
+      { label: "Thriller", href: "/movie/popular?genres=53" },
+      { label: "War", href: "/movie/popular?genres=10752" },
+      { label: "Western", href: "/movie/popular?genres=37" },
     ],
   },
   {
@@ -116,7 +127,7 @@ export default function Header() {
                 </NavigationMenuTrigger>
 
                 <NavigationMenuContent className="group-data-[viewport=false]/navigation-menu:border-[#01b4e4]/20 group-data-[viewport=false]/navigation-menu:bg-[#032541] group-data-[viewport=false]/navigation-menu:text-white">
-                  <ul className="w-44 p-1">
+                  <ul className={menu.links.length > 8 ? "grid w-md grid-cols-3 gap-x-1 p-2" : "w-44 p-1"}>
                     {menu.links.map((link) => (
                       <li key={link.href}>
                         <NavigationMenuLink 
@@ -170,7 +181,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="border-[#01b4e4]/20 bg-[#032541] text-white">
+            <SheetContent side="left" className="overflow-y-auto border-[#01b4e4]/20 bg-[#032541] text-white">
               <SheetHeader className="border-b border-b-[#01b4e4]/20">
                 <SheetTitle className="flex items-center gap-2 text-xl text-white">
                   <TvMinimalPlayIcon size={28} className="text-[#01b4e4]" />
@@ -222,7 +233,7 @@ export default function Header() {
                 ))}
               </nav>
 
-              <div className="mt-4 flex flex-col gap-3 px-5">
+              <div className="mt-4 flex flex-col gap-3 px-5 mb-10">
                 {!auth ? (
                   <>
                     <SheetClose asChild>
