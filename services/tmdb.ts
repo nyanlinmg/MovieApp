@@ -209,7 +209,7 @@ export async function getSearchSuggestions(query: string): Promise<SearchSuggest
     }))
     .filter((show) => show.title.toLowerCase().startsWith(cleanQuery));
 
-  return [...movieSuggestions, ...tvSuggestions].slice(0, 8);
+  return [...movieSuggestions, ...tvSuggestions].slice(0, 10);
 }
 
 export async function getPersonAwards(imdbId: string | null) {

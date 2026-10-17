@@ -4,7 +4,6 @@ import { StudioContentCard } from "@/components/StudioContentCard";
 import { getSearchResults } from "@/services/tmdb";
 import type { StudioContentItem } from "@/types/global";
 
-export const dynamic = "force-dynamic";
 
 function ResultSection({
   title,

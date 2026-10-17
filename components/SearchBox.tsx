@@ -24,8 +24,11 @@ export default function SearchBox({
   inputClassName,
   buttonClassName,
 }: SearchBoxProps) {
+  //store the current search query
   const [query, setQuery] = useState(defaultValue);
+  //store matching movies and tv shows for the search query
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
+  //store whether to show the suggestions dropdown
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
 
@@ -36,6 +39,7 @@ export default function SearchBox({
       return;
     }
 
+    //This variable helps prevent stale results from being displayed.
     let ignoreResult = false;
 
     const timer = window.setTimeout(async () => {
