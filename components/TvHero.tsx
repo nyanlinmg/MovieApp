@@ -96,7 +96,7 @@ export default function TvHero({ tv, videos }: { tv: TvType; videos: TrailerVide
                             <p className="leading-relaxed text-gray-200">{tv.overview}</p>
                         </div>
 
-                        {auth && <MovieActions title={tv.name} trailerKey={trailer?.key} tmdbId={tv.id} mediaType="movie" />}
+                        {auth && <MovieActions title={tv.name} trailerKey={trailer?.key} tmdbId={tv.id} mediaType="tv" />}
                     </div>
                 </motion.div>
             </div>
