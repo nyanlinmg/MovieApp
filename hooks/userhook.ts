@@ -1,10 +1,21 @@
 "use client"
 
 import { useApp } from "@/Provider/AppProvider";
-import { getUserApi, LoginCredentials, loginUserApi, RegisterCredentials, registerUserApi } from "@/services/userServices";
+import { getProfileDataApi, getUserApi, loginUserApi, registerUserApi, updateProfileApi } from "@/services/userServices";
+import type { LoginCredentials, RegisterCredentials } from "@/services/userServices";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { error } from "console";
 import { useRouter } from "next/navigation";
+
+export const useGetProfileData = () => {
+    const {
+        data, isLoading, error, refetch, isError
+    } = useQuery({
+        queryKey: ['profile'],
+        queryFn: () => getProfileDataApi()
+    });
+
+    return {data, isLoading, error, refetch, isError}
+}
 
 export const useGetUser = () => {
     const {
@@ -20,9 +31,19 @@ export const useGetUser = () => {
     return {users, isLoadingUsers, usersError, refetchUsers}
 }
 
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: updateProfileApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
+        }
+    });
+}
+
 export const useLoginUser = () => {
     const router = useRouter();
-    const queryClient = useQueryClient();
     const {setAuth} = useApp();
 
     const mutation = useMutation({

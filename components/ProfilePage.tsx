@@ -1,9 +1,8 @@
 "use client";
 
-import apiClient from "@/lib/apiClient";
 import { useApp } from "@/Provider/AppProvider";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
-import { useQuery } from "@tanstack/react-query";
+import {ProfileMediaItem, ProfileData } from "@/services/userServices";
 import {
   Bookmark,
   CalendarDays,
@@ -18,28 +17,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-type ProfileMediaItem = {
-  id: number;
-  mediaType: "movie" | "tv";
-  title: string;
-  posterPath: string | null;
-  date: string;
-  rating: number;
-};
-
-type ProfileData = {
-  user: {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    image: string | null;
-    createdAt: string;
-  };
-  favorites: ProfileMediaItem[];
-  watchlist: ProfileMediaItem[];
-};
+import { useGetProfileData } from "@/hooks/userhook";
 
 function ProfileMediaCard({ item }: { item: ProfileMediaItem }) {
   const year = item.date ? item.date.slice(0, 4) : null;
@@ -150,11 +128,7 @@ function getInitials(name: string) {
 export default function ProfilePage() {
   const { auth, authLoading } = useApp();
   const router = useRouter();
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["profile"],
-    queryFn: () => apiClient("/api/users/profile") as Promise<ProfileData>,
-    enabled: Boolean(auth),
-  });
+  const { data, isLoading, isError } = useGetProfileData();
 
   useEffect(() => {
     if (!authLoading && !auth) router.replace("/login");
@@ -182,6 +156,7 @@ export default function ProfilePage() {
     month: "long",
     year: "numeric",
   }).format(new Date(data.user.createdAt));
+
   const movieFavorites = data.favorites.filter((item) => item.mediaType === "movie").length;
   const tvFavorites = data.favorites.filter((item) => item.mediaType === "tv").length;
   const movieWatchlist = data.watchlist.filter((item) => item.mediaType === "movie").length;
@@ -192,7 +167,7 @@ export default function ProfilePage() {
       <section className="relative overflow-hidden border-b border-[#01b4e4]/15 bg-[#032541]">
         <div className="pointer-events-none absolute -right-24 -top-40 h-96 w-96 rounded-full bg-[#01b4e4]/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-8 flex-wrap md:flex-row md:items-center md:justify-between">
             <div className="flex min-w-0 items-center gap-5 sm:gap-7">
               {data.user.image ? (
                 <img
@@ -210,7 +185,7 @@ export default function ProfilePage() {
                   Your profile
                 </p>
                 <h1 className="truncate text-3xl font-bold sm:text-4xl">{data.user.name}</h1>
-                <p className="mt-1 text-white/60">@{data.user.username}</p>
+                <p className="mt-1 text-white/60">{data.user.username}</p>
                 <div className="mt-4 flex flex-col gap-2 text-sm text-white/75 sm:flex-row sm:gap-5">
                   <span className="flex items-center gap-2">
                     <Mail size={16} className="text-[#01b4e4]" />

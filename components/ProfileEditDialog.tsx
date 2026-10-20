@@ -1,9 +1,9 @@
 "use client";
 
-import apiClient from "@/lib/apiClient";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle, Pencil, UserRound, X } from "lucide-react";
 import { useState } from "react";
+import { useUpdateProfile } from "@/hooks/userhook";
+import type { ProfileUpdate, ProfileUser } from "@/services/userServices";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,22 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type ProfileUser = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  image: string | null;
-  createdAt: string;
-};
-
-type ProfileUpdate = {
-  name: string;
-  username: string;
-  email: string;
-  image?: string | null;
-};
-
 export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(user.name);
@@ -40,22 +24,7 @@ export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
   const [image, setImage] = useState<string | null>(user.image);
   const [imageChanged, setImageChanged] = useState(false);
   const [imageError, setImageError] = useState("");
-  const queryClient = useQueryClient();
-
-  const updateProfile = useMutation({
-    mutationFn: (profile: ProfileUpdate) =>
-      apiClient("/api/users/profile", {
-        method: "PATCH",
-        body: profile,
-      }),
-    onSuccess: ({ user: updatedUser }: { user: ProfileUser }) => {
-      queryClient.setQueryData(["profile"], (current) => {
-        if (!current || typeof current !== "object") return current;
-        return { ...current, user: updatedUser };
-      });
-      setOpen(false);
-    },
-  });
+  const updateProfile = useUpdateProfile();
 
   const openEditor = () => {
     setName(user.name);
@@ -83,7 +52,7 @@ export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = () => { 
       setImage(reader.result as string);
       setImageChanged(true);
       setImageError("");
@@ -97,7 +66,7 @@ export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
 
     const profile: ProfileUpdate = { name, username, email };
     if (imageChanged) profile.image = image;
-    updateProfile.mutate(profile);
+    updateProfile.mutate(profile, { onSuccess: () => setOpen(false) });
   };
 
   return (
@@ -142,7 +111,7 @@ export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
                 accept="image/*"
                 onChange={handleImageChange}
                 disabled={updateProfile.isPending}
-                className="h-auto border-white/15 bg-black/20 text-white file:mr-3 file:rounded-md file:border-0 file:bg-white/10 file:px-2 file:py-1 file:text-white"
+                className="h-auto border-white/15 bg-black/20 text-white file:mr-3 file:rounded-md file:border-0 file:bg-white/10 file:px-2 file:py-1 cursor-pointer file:text-white"
               />
               {image && (
                 <button
@@ -213,13 +182,14 @@ export default function ProfileEditDialog({ user }: { user: ProfileUser }) {
               variant="outline"
               onClick={() => setOpen(false)}
               disabled={updateProfile.isPending}
+              className="text-black/80 hover:bg-white/10 hover:text-white cursor-pointer"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={updateProfile.isPending || Boolean(imageError)}
-              className="bg-[#01b4e4] text-white hover:bg-[#01b4e4]/80"
+              className="bg-[#01b4e4] text-white cursor-pointer hover:bg-[#01b4e4]/80"
             >
               {updateProfile.isPending ? (
                 <>
