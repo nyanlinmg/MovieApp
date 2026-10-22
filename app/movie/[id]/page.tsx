@@ -3,6 +3,7 @@ import CrewSection from "@/components/CrewSection";
 import { MoreDetail } from "@/components/Moredetails";
 import MovieHero from "@/components/MovieHero";
 import RelatedMovies from "@/components/RelatedMoies";
+import ReviewSection from "@/components/ReviewSection";
 import Trailer from "@/components/Trailer";
 import { getMovieCredits, getMovieDetails, getMovieRecommendations, getMovieVideos } from "@/services/tmdb";
 
@@ -36,6 +37,7 @@ export default async function MovieDetail({
             <Trailer videos={videos} movie={movie} />
             <CastSection cast={movieCredits?.cast} id={movie.id} basePath="movie" />
             <CrewSection crew={keyCrew} id={movie.id} basePath="movie" />
+            <ReviewSection key={`movie-${movie.id}`} mediaTitle={movie.title} />
             <RelatedMovies movies={recommendations ?? []} basePath="movie" />
         </div>
     );

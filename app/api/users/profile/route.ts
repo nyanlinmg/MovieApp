@@ -12,218 +12,131 @@ type ProfileMediaItem = {
   rating: number;
 };
 
-async function getProfileMediaItem(
+// the user fields we send back (used by both GET and PATCH)
+const userFields = {
+  id: true,
+  name: true,
+  username: true,
+  email: true,
+  image: true,
+  createdAt: true,
+} as const;
+
+// a short way to send an error message
+const fail = (message: string, status: number) =>
+  NextResponse.json({ message }, { status });
+
+// trim text, or return "" if it is not text
+const clean = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+
+// load one movie or show from TMDB (null if it is gone, so the page still loads)
+async function getMediaItem(
   tmdbId: number,
   mediaType: "movie" | "tv"
 ): Promise<ProfileMediaItem | null> {
   try {
     if (mediaType === "movie") {
-      const movie = await getMovieDetails(tmdbId);
-
-      return {
-        id: movie.id,
-        mediaType,
-        title: movie.title,
-        posterPath: movie.poster_path,
-        date: movie.release_date,
-        rating: movie.vote_average,
-      };
+      const m = await getMovieDetails(tmdbId);
+      return { id: m.id, mediaType, title: m.title, posterPath: m.poster_path, date: m.release_date, rating: m.vote_average };
     }
 
-    const show = await getTvDetails(tmdbId);
-
-    return {
-      id: show.id,
-      mediaType,
-      title: show.name,
-      posterPath: show.poster_path,
-      date: show.first_air_date,
-      rating: show.vote_average,
-    };
+    const s = await getTvDetails(tmdbId);
+    return { id: s.id, mediaType, title: s.name, posterPath: s.poster_path, date: s.first_air_date, rating: s.vote_average };
   } catch {
-    // A removed or unavailable TMDB title should not prevent the rest of the page loading.
     return null;
   }
 }
 
+// turn saved records into full items, skipping the ones that failed
+async function loadItems(records: { tmdbId: number; mediaType: "movie" | "tv" }[]) {
+  const items = await Promise.all(
+    records.map((r) => getMediaItem(r.tmdbId, r.mediaType))
+  );
+  return items.filter((item): item is ProfileMediaItem => item !== null);
+}
+
 export async function GET(req: NextRequest) {
   const { user: tokenUser, error } = verifyAuth(req);
-
   if (error) return error;
 
   try {
-    const { id: userId } = tokenUser as { id: number };
+    const userId = (tokenUser as { id: number }).id;
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
-        id: true,
-        name: true,
-        username: true,
-        email: true,
-        image: true,
-        createdAt: true,
-        favorites: {
-          orderBy: { createdAt: "desc" },
-          select: { tmdbId: true, mediaType: true },
-        },
-        watchlist: {
-          orderBy: { createdAt: "desc" },
-          select: { tmdbId: true, mediaType: true },
-        },
+        ...userFields,
+        favorites: { orderBy: { createdAt: "desc" }, select: { tmdbId: true, mediaType: true } },
+        watchlist: { orderBy: { createdAt: "desc" }, select: { tmdbId: true, mediaType: true } },
       },
     });
 
-    if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
+    if (!user) return fail("User not found", 404);
 
-    const loadCollection = async (
-      records: typeof user.favorites
-    ): Promise<ProfileMediaItem[]> => {
-      const items = await Promise.all(
-        records.map(({ tmdbId, mediaType }) =>
-          getProfileMediaItem(tmdbId, mediaType)
-        )
-      );
+    // separate the two lists from the profile fields
+    const { favorites, watchlist, ...profile } = user;
 
-      return items.filter(
-        (item): item is ProfileMediaItem => item !== null
-      );
-    };
-
-    const [favorites, watchlist] = await Promise.all([
-      loadCollection(user.favorites),
-      loadCollection(user.watchlist),
+    const [favoriteItems, watchlistItems] = await Promise.all([
+      loadItems(favorites),
+      loadItems(watchlist),
     ]);
 
     return NextResponse.json({
-      user: {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        image: user.image,
-        createdAt: user.createdAt,
-      },
-      favorites,
-      watchlist,
+      user: profile,
+      favorites: favoriteItems,
+      watchlist: watchlistItems,
     });
   } catch {
-    return NextResponse.json(
-      { message: "Unable to load profile" },
-      { status: 500 }
-    );
+    return fail("Unable to load profile", 500);
   }
 }
 
 export async function PATCH(req: NextRequest) {
   const { user: tokenUser, error } = verifyAuth(req);
-
   if (error) return error;
 
   try {
-    const { id: userId } = tokenUser as { id: number };
-    const body = (await req.json()) as {
-      name?: unknown;
-      username?: unknown;
-      email?: unknown;
-      image?: unknown;
-    };
+    const userId = (tokenUser as { id: number }).id;
+    const body = await req.json();
 
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const username = typeof body.username === "string" ? body.username.trim() : "";
-    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+    const name = clean(body.name);
+    const username = clean(body.username);
+    const email = clean(body.email).toLowerCase();
+    const image = body?.image; // undefined = keep, null = remove, text = new image
 
+    // check the text fields
     if (!name || !username || !email) {
-      return NextResponse.json(
-        { message: "Name, username, and email are required" },
-        { status: 400 }
-      );
+      return fail("Name, username, and email are required", 400);
     }
-
     if (name.length > 80 || username.length > 40 || email.length > 254) {
-      return NextResponse.json(
-        { message: "One or more profile fields are too long" },
-        { status: 400 }
-      );
+      return fail("One or more profile fields are too long", 400);
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json(
-        { message: "Enter a valid email address" },
-        { status: 400 }
-      );
-    }
-
-    const currentUser = await prisma.user.findUnique({
-      where: { id: userId },
+    // does someone else already use this email?
+    const emailTaken = await prisma.user.findFirst({
+      where: { email, NOT: { id: userId } },
       select: { id: true },
     });
+    if (emailTaken) return fail("Email is already in use", 409);
 
-    if (!currentUser) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
-
-    const emailOwner = await prisma.user.findUnique({
-      where: { email },
-      select: { id: true },
-    });
-
-    if (emailOwner && emailOwner.id !== userId) {
-      return NextResponse.json(
-        { message: "Email is already in use" },
-        { status: 409 }
-      );
-    }
-
-    if (body.image !== undefined) {
-      if (
-        body.image !== null &&
-        (typeof body.image !== "string" || !body.image.startsWith("data:image/"))
-      ) {
-        return NextResponse.json(
-          { message: "Choose a valid image file" },
-          { status: 400 }
-        );
+    // check the image (only when a new one is sent)
+    if (image !== undefined && image !== null) {
+      if (typeof image !== "string" || !image.startsWith("data:image/")) {
+        return fail("Choose a valid image file", 400);
       }
-
-      if (typeof body.image === "string" && body.image.length > 2_800_000) {
-        return NextResponse.json(
-          { message: "Profile image must be smaller than 2 MB" },
-          { status: 413 }
-        );
+      if (image.length > 2_800_000) {
+        return fail("Profile image must be smaller than 2 MB", 413);
       }
-    }
-
-    const updateData: {
-      name: string;
-      username: string;
-      email: string;
-      image?: string | null;
-    } = { name, username, email };
-
-    if (body.image !== undefined) {
-      updateData.image = body.image as string | null;
     }
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
-      data: updateData,
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        email: true,
-        image: true,
-        createdAt: true,
-      },
+      data: { name, username, email, ...(image !== undefined && { image }) },
+      select: userFields,
     });
 
     return NextResponse.json({ user: updatedUser });
   } catch {
-    return NextResponse.json(
-      { message: "Unable to update profile" },
-      { status: 500 }
-    );
+    return fail("Unable to update profile", 500);
   }
 }

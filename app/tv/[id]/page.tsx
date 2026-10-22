@@ -8,7 +8,9 @@ import {
 } from "@/services/tmdb";
 
 import CastSection from "@/components/CastSection";
+import CrewSection from "@/components/CrewSection";
 import RelatedMovies from "@/components/RelatedMoies";
+import ReviewSection from "@/components/ReviewSection";
 import TvHero from "@/components/TvHero";
 import TvTrailer from "@/components/TvTrailer";
 import { TvMoreDetail } from "@/components/TvMoreDetails";
@@ -33,6 +35,12 @@ export default async function TvDetailsPage({ params }: TvDetailsPageProps) {
 
   const year = tv.first_air_date?.slice(0, 4);
   const episodeRuntime = tv.episode_run_time?.[0] ?? null;
+  const crew = credits?.crew ?? [];
+  const directors = crew.filter((person) => person.job === "Director");
+  const writers = crew.filter((person) => person.job === "Writer" || person.job === "Screenplay");
+  const producers = crew.filter((person) => person.job === "Producer");
+  const composers = crew.filter((person) => person.job === "Original Music Composer");
+  const keyCrew = [...directors, ...writers, ...producers, ...composers].slice(0, 12);
 
   return (
     <div className="bg-black text-white min-h-screen">
@@ -46,6 +54,12 @@ export default async function TvDetailsPage({ params }: TvDetailsPageProps) {
 
       {/* Cast */}
       <CastSection cast={credits.cast} id={tv.id} basePath="tv" />
+
+      {/* Crew */}
+      <CrewSection crew={keyCrew} id={tv.id} basePath="tv" />
+
+      {/* Reviews */}
+      <ReviewSection key={`tv-${tv.id}`} mediaTitle={tv.name} />
 
       {/* Related */}
       <div className="px-10 py-6">

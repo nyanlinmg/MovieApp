@@ -22,6 +22,9 @@ model User {
   createdAt DateTime @default(now())
   favorites Favorite[]
   watchlist Watchlist[]
+  reviews   Review[]
+  reviewLikes ReviewLike[]
+  comments    Comment[]
 }
 
 enum MediaType {
@@ -49,4 +52,41 @@ model Watchlist {
   createdAt DateTime  @default(now())
 
   @@unique([userId, tmdbId, mediaType])
+}
+
+model Review {
+  id        Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  tmdbId    Int
+  mediaType MediaType
+  content   String
+  rating    Int
+  createdAt DateTime  @default(now())
+
+  likes     ReviewLike[]
+  comments  Comment[]
+
+  @@unique([userId, tmdbId, mediaType])
+}
+
+model ReviewLike {
+  id       Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  review    Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId  Int
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, reviewId])
+}
+
+model Comment {
+  id        Int   @id @default(autoincrement())
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  review    Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId  Int
+  content   String
+  createdAt DateTime  @default(now())
 }
