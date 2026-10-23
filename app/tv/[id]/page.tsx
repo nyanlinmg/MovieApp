@@ -59,7 +59,12 @@ export default async function TvDetailsPage({ params }: TvDetailsPageProps) {
       <CrewSection crew={keyCrew} id={tv.id} basePath="tv" />
 
       {/* Reviews */}
-      <ReviewSection key={`tv-${tv.id}`} mediaTitle={tv.name} />
+      <ReviewSection
+        key={`tv-${tv.id}`}
+        tmdbId={tv.id}
+        mediaType="tv"
+        mediaTitle={tv.name}
+      />
 
       {/* Related */}
       <div className="px-10 py-6">

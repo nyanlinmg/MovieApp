@@ -1,4 +1,4 @@
-import { MediaType } from "@/generated/prisma/enums";
+import { MediaType } from "@/generated/prisma-client/enums";
 import { prisma } from "@/lib/prisma";
 import { verifyAuth } from "@/middleware/auth";
 import { NextRequest, NextResponse } from "next/server";

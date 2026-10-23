@@ -37,7 +37,12 @@ export default async function MovieDetail({
             <Trailer videos={videos} movie={movie} />
             <CastSection cast={movieCredits?.cast} id={movie.id} basePath="movie" />
             <CrewSection crew={keyCrew} id={movie.id} basePath="movie" />
-            <ReviewSection key={`movie-${movie.id}`} mediaTitle={movie.title} />
+            <ReviewSection
+                key={`movie-${movie.id}`}
+                tmdbId={movie.id}
+                mediaType="movie"
+                mediaTitle={movie.title}
+            />
             <RelatedMovies movies={recommendations ?? []} basePath="movie" />
         </div>
     );
