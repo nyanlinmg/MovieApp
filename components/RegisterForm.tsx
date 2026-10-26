@@ -9,6 +9,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircleIcon, Image, Loader2 } from "lucide-react";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function RegisterForm() {
 
@@ -175,10 +176,9 @@ export default function RegisterForm() {
                                         <Label htmlFor="password" className="text-white text-lg">Password</Label>
                                     </div>
 
-                                    <Input 
+                                    <PasswordInput
                                         id="password"
                                         onChange={(e) => setPassword(e.currentTarget.value)}
-                                        type="password"
                                         value={password}
                                         className="text-white py-5 bg-mist-900"
                                         placeholder="enter your password"

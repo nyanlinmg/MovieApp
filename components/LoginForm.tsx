@@ -8,6 +8,8 @@ import { Label } from "./ui/label";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircleIcon, Loader2 } from "lucide-react";
 import { useLoginUser } from "@/hooks/userhook";
+import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginForm() {
     const [ email, setEmail ] = useState<string>("");
@@ -71,18 +73,17 @@ export default function LoginForm() {
                                 <div className="grid gap-2">
                                     <div className="flex items-center font-mono">
                                         <Label htmlFor="password" className="text-white text-lg">Password</Label>
-                                        <a 
-                                            href="#"
+                                        <Link
+                                            href="/forgot-password"
                                             className="ml-auto text-white inline-block text-sm underline-offset-4 hover:underline"
                                         >
                                             Forgot your password ?
-                                        </a>
+                                        </Link>
                                     </div>
 
-                                    <Input 
+                                    <PasswordInput
                                         id="password"
                                         onChange={(e) => setPassword(e.currentTarget.value)}
-                                        type="password"
                                         value={password}
                                         className="text-white py-5 bg-mist-900"
                                         placeholder="enter your password"

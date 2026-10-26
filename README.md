@@ -20,6 +20,16 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Password reset setup
+
+Apply the included database migration before using password reset:
+
+```bash
+npx prisma migrate deploy
+```
+
+In development, reset links are printed in the Next.js server terminal. To send real emails, configure `RESEND_API_KEY`, `EMAIL_FROM`, and `APP_URL` in your environment. `APP_URL` should be the public base URL of the app, such as `https://example.com`.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
