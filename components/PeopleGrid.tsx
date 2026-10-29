@@ -27,7 +27,8 @@ export default function PeopleGrid({
                 {people.map((person) => (
                 <Link key={person.key} href={`/person/${person.id}`}>
                     <div className="overflow-hidden rounded-lg border-2 border-mist-600">
-                        <img
+                        <div className="overflow-hidden">
+                            <img
                             src={
                             person.profile_path
                                 ? `https://image.tmdb.org/t/p/w300${person.profile_path}`
@@ -36,6 +37,7 @@ export default function PeopleGrid({
                             alt={person.name}
                             className="h-64 md:h-70 lg:h-80 w-full object-cover transition-transform duration-300 hover:scale-110"
                         />
+                        </div>
                         <div className="bg-[#111827] p-3">
                             <p className="truncate text-sm font-semibold">{person.name}</p>
                             <p className="truncate text-sm text-muted-foreground">

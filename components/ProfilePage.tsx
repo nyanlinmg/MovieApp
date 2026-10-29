@@ -2,58 +2,21 @@
 
 import { useApp } from "@/Provider/AppProvider";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
-import {ProfileMediaItem, ProfileData } from "@/services/userServices";
+import ProfileMediaCard from "@/components/ProfileMediaCard";
+import type { ProfileMediaItem } from "@/services/userServices";
 import {
   Bookmark,
   CalendarDays,
-  Film,
   Heart,
   LoaderCircle,
   Mail,
-  Star,
-  Tv,
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useGetProfileData } from "@/hooks/userhook";
-
-function ProfileMediaCard({ item }: { item: ProfileMediaItem }) {
-  const year = item.date ? item.date.slice(0, 4) : null;
-
-  return (
-    <Link
-      href={`/${item.mediaType}/${item.id}`}
-      className="group min-w-0 overflow-hidden rounded-lg border border-white/10 bg-[#032541] transition hover:-translate-y-1 hover:border-[#01b4e4]/60"
-    >
-      {item.posterPath ? (
-        <img
-          src={`https://image.tmdb.org/t/p/w342${item.posterPath}`}
-          alt={`${item.title} poster`}
-          loading="lazy"
-          className="aspect-2/3 w-full object-cover"
-        />
-      ) : (
-        <div className="flex aspect-2/3 items-center justify-center bg-white/5 text-white/40">
-          {item.mediaType === "movie" ? <Film size={34} /> : <Tv size={34} />}
-        </div>
-      )}
-      <div className="space-y-1 p-3">
-        <p className="line-clamp-2 min-h-10 font-medium text-white group-hover:text-[#01b4e4]">
-          {item.title}
-        </p>
-        <div className="flex items-center justify-between gap-2 text-sm text-white/60">
-          <span>{year || "Release date unknown"}</span>
-          <span className="flex items-center gap-1">
-            <Star size={14} className="fill-amber-400 text-amber-400" />
-            {item.rating.toFixed(1)}
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
+import { motion } from "framer-motion";
 
 function MediaSection({
   title,
@@ -76,8 +39,18 @@ function MediaSection({
 
       {mediaItems.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {mediaItems.map((item) => (
-            <ProfileMediaCard key={`${item.mediaType}-${item.id}`} item={item} />
+          {mediaItems.map((item, index) => (
+            <motion.div
+              key={`${item.mediaType}-${item.id}`}
+              initial={{ opacity: 0, y: 24, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 0.4, delay: index * 0.06 }}
+            >
+              <ProfileMediaCard item={item} />
+            </motion.div>
           ))}
         </div>
       ) : (
@@ -105,13 +78,19 @@ function CollectionGroup({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-white/3 p-5 sm:p-7">
+    <motion.section
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ amount: 0.15 }}
+      transition={{ duration: 0.5 }}
+      className="rounded-2xl border border-white/10 bg-white/3 p-5 sm:p-7"
+    >
       <div>
         <h2 className="text-2xl font-bold text-white">{title}</h2>
         <p className="mt-1 text-sm text-white/55">{description}</p>
       </div>
       {children}
-    </section>
+    </motion.section>
   );
 }
 
@@ -166,7 +145,12 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-black pb-16 text-white">
       <section className="relative overflow-hidden border-b border-[#01b4e4]/15 bg-[#032541]">
         <div className="pointer-events-none absolute -right-24 -top-40 h-96 w-96 rounded-full bg-[#01b4e4]/10 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+        <motion.div
+          initial={{ opacity: 0, y: -20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14"
+        >
           <div className="flex flex-col gap-8 flex-wrap md:flex-row md:items-center md:justify-between">
             <div className="flex min-w-0 items-center gap-5 sm:gap-7">
               {data.user.image ? (
@@ -217,7 +201,7 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       <main className="mx-auto flex max-w-7xl flex-col gap-8 px-5 pt-9 sm:px-8">
